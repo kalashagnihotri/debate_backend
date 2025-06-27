@@ -1,0 +1,61 @@
+[
+  {
+    "model": "debates.participation",
+    "pk": 1,
+    "fields": {
+      "session": 1,
+      "user": 3,
+      "role": "participant",
+      "side": "proposition",
+      "joined_at": "2025-06-25T14:55:00Z",
+      "is_participant": true
+    }
+  },
+  {
+    "model": "debates.participation",
+    "pk": 2,
+    "fields": {
+      "session": 1,
+      "user": 4,
+      "role": "participant",
+      "side": "opposition",
+      "joined_at": "2025-06-25T14:58:00Z",
+      "is_participant": true
+    }
+  },
+  {
+    "model": "debates.participation",
+    "pk": 3,
+    "fields": {
+      "session": 1,
+      "user": 5,
+      "role": "observer",
+      "joined_at": "2025-06-25T15:01:00Z",
+      "is_participant": false
+    }
+  },
+  {
+    "model": "debates.participation",
+    "pk": 4,
+    "fields": {
+      "session": 2,
+      "user": 3,
+      "role": "participant",
+      "side": "proposition",
+      "joined_at": "2025-06-28T13:45:00Z",
+      "is_participant": true
+    }
+  },
+  {
+    "model": "debates.participation",
+    "pk": 5,
+    "fields": {
+      "session": 2,
+      "user": 5,
+      "role": "participant",
+      "side": "opposition",
+      "joined_at": "2025-06-28T13:50:00Z",
+      "is_participant": true
+    }
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "model": "debates.debatesession",
+    "pk": 1,
+    "fields": {
+      "topic": 1,
+      "moderator": 2,
+      "title": "AI Regulation Debate - June 2025",
+      "description": "First debate session on government regulation of AI development",
+      "scheduled_start": "2025-06-25T15:00:00Z",
+      "duration_minutes": 90,
+      "max_participants": 6,
+      "status": "completed",
+      "debate_started_at": "2025-06-25T15:02:00Z",
+      "debate_ended_at": "2025-06-25T16:28:00Z",
+      "joining_started_at": "2025-06-25T14:50:00Z",
+      "joining_window_end": "2025-06-25T15:05:00Z",
+      "voting_started_at": "2025-06-25T16:28:00Z",
+      "voting_end_time": "2025-06-25T16:38:00Z",
+      "created_at": "2025-06-20T12:00:00Z"
+    }
+  },
+  {
+    "model": "debates.debatesession",
+    "pk": 2,
+    "fields": {
+      "topic": 2,
+      "moderator": 1,
+      "title": "Remote vs Office Work Discussion",
+      "description": "Interactive session exploring workplace dynamics in the post-COVID era",
+      "scheduled_start": "2025-06-28T14:00:00Z",
+      "duration_minutes": 60,
+      "max_participants": 4,
+      "status": "scheduled",
+      "created_at": "2025-06-22T09:30:00Z"
+    }
+  },
+  {
+    "model": "debates.debatesession",
+    "pk": 3,
+    "fields": {
+      "topic": 4,
+      "moderator": 2,
+      "title": "Online Education Effectiveness Debate",
+      "description": "Examining the future of education in digital environments",
+      "scheduled_start": "2025-06-30T10:00:00Z",
+      "duration_minutes": 75,
+      "max_participants": 8,
+      "status": "scheduled",
+      "created_at": "2025-06-24T16:15:00Z"
+    }
+  }
+]

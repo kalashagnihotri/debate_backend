@@ -1,0 +1,60 @@
+[
+  {
+    "model": "notifications.notification",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "message": "Your debate session 'AI Regulation Debate - June 2025' is starting in 10 minutes!",
+      "type": "UPCOMING_DEBATE",
+      "is_read": true,
+      "read_at": "2025-06-25T14:52:00Z",
+      "created_at": "2025-06-25T14:50:00Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "message": "Your debate session 'AI Regulation Debate - June 2025' is starting in 10 minutes!",
+      "type": "UPCOMING_DEBATE",
+      "is_read": true,
+      "read_at": "2025-06-25T14:53:00Z",
+      "created_at": "2025-06-25T14:50:00Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 3,
+    "fields": {
+      "user": 5,
+      "message": "Debate session 'AI Regulation Debate - June 2025' has ended. Voting is now open!",
+      "type": "VOTING_STARTED",
+      "is_read": true,
+      "read_at": "2025-06-25T16:29:00Z",
+      "created_at": "2025-06-25T16:28:00Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 4,
+    "fields": {
+      "user": 3,
+      "message": "New debate topic 'Is Online Education as Effective as Traditional Classroom Learning?' is now available!",
+      "type": "NEW_TOPIC",
+      "is_read": false,
+      "created_at": "2025-06-18T16:46:00Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 5,
+    "fields": {
+      "user": 4,
+      "message": "You have been invited to participate in 'Remote vs Office Work Discussion' scheduled for June 28th.",
+      "type": "SESSION_INVITATION",
+      "is_read": false,
+      "created_at": "2025-06-22T09:31:00Z"
+    }
+  }
+]

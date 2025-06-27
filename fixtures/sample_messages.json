@@ -1,0 +1,68 @@
+[
+  {
+    "model": "debates.message",
+    "pk": 1,
+    "fields": {
+      "session": 1,
+      "author": 3,
+      "content": "I believe government regulation of AI is essential to prevent potential misuse and ensure ethical development. Without proper oversight, we risk creating systems that could harm society.",
+      "message_type": "argument",
+      "timestamp": "2025-06-25T15:05:00Z"
+    }
+  },
+  {
+    "model": "debates.message",
+    "pk": 2,
+    "fields": {
+      "session": 1,
+      "author": 4,
+      "content": "While I understand the concerns, excessive government regulation could stifle innovation and slow down beneficial AI developments. The private sector can self-regulate more effectively.",
+      "message_type": "argument",
+      "timestamp": "2025-06-25T15:08:00Z"
+    }
+  },
+  {
+    "model": "debates.message",
+    "pk": 3,
+    "fields": {
+      "session": 1,
+      "author": 3,
+      "content": "But self-regulation has failed in other tech sectors. Look at social media platforms - they only implemented meaningful safety measures after government pressure.",
+      "message_type": "rebuttal",
+      "timestamp": "2025-06-25T15:12:00Z"
+    }
+  },
+  {
+    "model": "debates.message",
+    "pk": 4,
+    "fields": {
+      "session": 1,
+      "author": 4,
+      "content": "That's a fair point, but AI development is moving so rapidly that government regulations would be outdated by the time they're implemented. We need flexible, industry-led standards.",
+      "message_type": "rebuttal",
+      "timestamp": "2025-06-25T15:15:00Z"
+    }
+  },
+  {
+    "model": "debates.message",
+    "pk": 5,
+    "fields": {
+      "session": 1,
+      "author": 2,
+      "content": "Excellent points from both sides. Let's now focus on specific regulatory mechanisms. What would effective AI governance look like?",
+      "message_type": "question",
+      "timestamp": "2025-06-25T15:18:00Z"
+    }
+  },
+  {
+    "model": "debates.message",
+    "pk": 6,
+    "fields": {
+      "session": 1,
+      "author": 3,
+      "content": "Thank you for this engaging debate. Both perspectives have merit, and finding the right balance will be crucial for AI's future.",
+      "message_type": "closing",
+      "timestamp": "2025-06-25T16:25:00Z"
+    }
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "username": "admin_user",
+      "email": "admin@debateplatform.com",
+      "first_name": "Admin",
+      "last_name": "User",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-06-01T10:00:00Z",
+      "role": "moderator",
+      "password": "pbkdf2_sha256$600000$test$hash"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "username": "moderator_alice",
+      "email": "alice@debateplatform.com",
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-06-02T09:30:00Z",
+      "role": "moderator",
+      "password": "pbkdf2_sha256$600000$test$hash"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "username": "student_bob",
+      "email": "bob@university.edu",
+      "first_name": "Bob",
+      "last_name": "Smith",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-06-03T14:15:00Z",
+      "role": "student",
+      "password": "pbkdf2_sha256$600000$test$hash"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "username": "student_charlie",
+      "email": "charlie@university.edu",
+      "first_name": "Charlie",
+      "last_name": "Brown",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-06-04T11:45:00Z",
+      "role": "student",
+      "password": "pbkdf2_sha256$600000$test$hash"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "username": "student_diana",
+      "email": "diana@university.edu",
+      "first_name": "Diana",
+      "last_name": "Wilson",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-06-05T16:20:00Z",
+      "role": "student",
+      "password": "pbkdf2_sha256$600000$test$hash"
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "bio": "Platform administrator with expertise in debate moderation and educational technology.",
+      "date_joined": "2025-06-01T10:00:00Z",
+      "last_active": "2025-06-28T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "bio": "Experienced debate moderator with a background in philosophy and rhetoric.",
+      "date_joined": "2025-06-02T09:30:00Z",
+      "last_active": "2025-06-28T11:45:00Z"
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "bio": "Computer Science student passionate about technology ethics and AI development.",
+      "date_joined": "2025-06-03T14:15:00Z",
+      "last_active": "2025-06-28T10:30:00Z"
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "bio": "Political Science major interested in public policy and democratic processes.",
+      "date_joined": "2025-06-04T11:45:00Z",
+      "last_active": "2025-06-28T09:15:00Z"
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "bio": "Environmental Studies student advocating for sustainable technology solutions.",
+      "date_joined": "2025-06-05T16:20:00Z",
+      "last_active": "2025-06-28T08:45:00Z"
+    }
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "model": "debates.debatevote",
+    "pk": 1,
+    "fields": {
+      "session": 1,
+      "voter": 5,
+      "vote": "proposition",
+      "timestamp": "2025-06-25T16:30:00Z"
+    }
+  },
+  {
+    "model": "debates.vote",
+    "pk": 1,
+    "fields": {
+      "debate_session": 1,
+      "voter": 5,
+      "vote_type": "WINNING_SIDE",
+      "winning_side": "proposition",
+      "created_at": "2025-06-25T16:30:00Z"
+    }
+  }
+]

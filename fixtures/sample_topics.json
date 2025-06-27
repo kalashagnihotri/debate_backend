@@ -1,0 +1,62 @@
+[
+  {
+    "model": "debates.debatetopic",
+    "pk": 1,
+    "fields": {
+      "title": "Should AI Development Be Regulated by Government?",
+      "description": "A debate exploring the balance between innovation freedom and regulatory oversight in artificial intelligence development. Participants will examine the potential benefits and risks of government intervention in AI research and deployment.",
+      "category": "Technology",
+      "created_at": "2025-06-10T10:00:00Z",
+      "created_by": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "debates.debatetopic",
+    "pk": 2,
+    "fields": {
+      "title": "Is Remote Work Better Than Office Work?",
+      "description": "An examination of the pros and cons of remote work versus traditional office environments. This debate will cover productivity, work-life balance, company culture, and economic impacts.",
+      "category": "Business",
+      "created_at": "2025-06-12T14:30:00Z",
+      "created_by": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "debates.debatetopic",
+    "pk": 3,
+    "fields": {
+      "title": "Should Social Media Platforms Be Liable for User-Generated Content?",
+      "description": "A discussion on the responsibilities of social media companies regarding content moderation, free speech, and user safety. This debate addresses platform liability and content governance.",
+      "category": "Technology",
+      "created_at": "2025-06-15T09:15:00Z",
+      "created_by": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "debates.debatetopic",
+    "pk": 4,
+    "fields": {
+      "title": "Is Online Education as Effective as Traditional Classroom Learning?",
+      "description": "An analysis of online versus in-person education effectiveness, considering learning outcomes, student engagement, accessibility, and long-term educational impact.",
+      "category": "Education",
+      "created_at": "2025-06-18T16:45:00Z",
+      "created_by": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "debates.debatetopic",
+    "pk": 5,
+    "fields": {
+      "title": "Should Cryptocurrency Replace Traditional Banking?",
+      "description": "A comprehensive debate on the future of financial systems, examining whether cryptocurrencies can and should replace traditional banking infrastructure.",
+      "category": "Finance",
+      "created_at": "2025-06-20T11:20:00Z",
+      "created_by": 1,
+      "is_active": true
+    }
+  }
+]
