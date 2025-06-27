@@ -1,0 +1,24 @@
+Django>=4.2,<5.0
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.2
+psycopg2-binary>=2.9         # For PostgreSQL (preferred). Remove if only using SQLite.
+django-cors-headers>=4.0
+drf-yasg>=1.21               # Swagger/OpenAPI documentation
+channels>=4.0                # For real-time features (WebSockets)
+channels-redis>=4.0          # For Channels backend (if using Redis for real-time)
+redis>=5.0                   # Required if using Channels or caching
+django-redis>=5.0            # Django Redis cache backend
+daphne>=4.0                  # ASGI server for WebSocket support
+python-dotenv>=1.0           # For .env management
+Pillow>=10.0                 # If user avatars/images needed
+
+# Testing and development tools
+pytest>=8.0
+pytest-django>=4.5
+coverage>=7.0
+
+# Optional: PDF export for transcripts (bonus)
+xhtml2pdf>=0.2
+
+# Optional: Google API integration (bonus)
+google-api-python-client>=2.0
