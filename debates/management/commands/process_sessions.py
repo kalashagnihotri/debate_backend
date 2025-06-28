@@ -90,8 +90,7 @@ class Command(BaseCommand):
                 recipient=user,
                 notification_type='debate_starting',
                 title=f'Debate starting: {session.topic.title}',
-                message=f'A debate on "{
-                    session.topic.title}" is starting! Join now during the 5-minute joining window.',
+                message=f'A debate on "{session.topic.title}" is starting! Join now during the 5-minute joining window.',
                 session=session
             )
             for user in users
@@ -108,8 +107,7 @@ class Command(BaseCommand):
                 recipient=participant,
                 notification_type='vote_reminder',
                 title='Voting has started!',
-                message=f'The debate on "{
-                    session.topic.title}" has ended. You have 10 minutes to vote.',
+                message=f'The debate on "{session.topic.title}" has ended. You have 10 minutes to vote.',
                 session=session
             )
             for participant in participants

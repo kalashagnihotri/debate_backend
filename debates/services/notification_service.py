@@ -211,8 +211,7 @@ class NotificationService:
                     recipients=recipients,
                     notification_type='session_starting',
                     title=f'🔥 New Debate Starting: {session.topic.title}',
-                    message=f'A new debate on "{
-                        session.topic.title}" is starting! Join now during the 5-minute joining window.',
+                    message=f'A new debate on "{session.topic.title}" is starting! Join now during the 5-minute joining window.',
                     sender=session.moderator,
                     session=session,
                     priority='high',
@@ -275,8 +274,7 @@ class NotificationService:
             session=session,
             notification_type='debate_started',
             title='💬 Debate Chat Unlocked!',
-            message=f'The debate on "{
-                session.topic.title}" has started. Participants can now chat!',
+            message=f'The debate on "{session.topic.title}" has started. Participants can now chat!',
             sender=session.moderator,
             priority='normal',
             action_url=f'/debates/{session.id}',
@@ -295,8 +293,7 @@ class NotificationService:
             session=session,
             notification_type='voting_started',
             title='🗳️ Voting Started!',
-            message=f'The debate on "{
-                session.topic.title}" has ended. Vote for the best participant now! (30 seconds)',
+            message=f'The debate on "{session.topic.title}" has ended. Vote for the best participant now! (30 seconds)',
             sender=session.moderator,
             priority='high',
             action_url=f'/debates/{session.id}',
@@ -322,8 +319,7 @@ class NotificationService:
             session=session,
             notification_type='session_finished',
             title=f'Debate finished: {session.topic.title}',
-            message=f'The debate has concluded with {
-                session.total_votes} votes.{winner_text}',
+            message=f'The debate has concluded with {session.total_votes} votes.{winner_text}',
             priority='normal',
             action_url=f'/debates/{session.id}',
             action_label='View Results'

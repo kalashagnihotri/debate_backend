@@ -171,8 +171,7 @@ class SessionModerationMixin:
             sender=request.user,
             notification_type='moderation_action',
             title='Warning issued',
-            message=f'You have received a warning in the debate "{
-                session.topic.title}". Reason: {reason}',
+            message=f'You have received a warning in the debate "{session.topic.title}". Reason: {reason}',
             session=session
         )
 
@@ -232,8 +231,7 @@ class SessionModerationMixin:
             sender=request.user,
             notification_type='moderation_action',
             title='Removed from debate',
-            message=f'You have been removed from the debate "{
-                session.topic.title}". Reason: {reason}',
+            message=f'You have been removed from the debate "{session.topic.title}". Reason: {reason}',
             session=session
         )
 
