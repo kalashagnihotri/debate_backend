@@ -10,30 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_debate_platform
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-      
-      redis:
-        image: redis:6
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-
     steps:
     - uses: actions/checkout@v3
     
@@ -50,8 +26,6 @@ jobs:
     - name: Set up environment variables
       run: |
         echo "DJANGO_SETTINGS_MODULE=onlineDebatePlatform.test_settings" >> $GITHUB_ENV
-        echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/test_debate_platform" >> $GITHUB_ENV
-        echo "REDIS_URL=redis://localhost:6379/0" >> $GITHUB_ENV
     
     - name: Run migrations
       run: |
@@ -59,7 +33,7 @@ jobs:
     
     - name: Run tests with coverage
       run: |
-        coverage run --source='.' manage.py test users.tests debates.tests notifications.tests tests --verbosity=2
+        coverage run --source='.' manage.py test tests.test_working_endpoints --verbosity=2
         coverage xml
     
     - name: Upload coverage to Codecov

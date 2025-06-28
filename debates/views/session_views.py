@@ -27,9 +27,9 @@ from ..models import (
     DebateVote,
     Message,
     ModerationAction,
-    Notification,
     Participation,
 )
+from notifications.models import Notification
 from ..serializers import DebateSessionSerializer
 from ..services.notification_service import notification_service
 from .session_lifecycle import SessionLifecycleMixin

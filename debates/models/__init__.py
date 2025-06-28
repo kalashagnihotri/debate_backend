@@ -12,13 +12,6 @@ from .session import DebateSession
 from .topic import DebateTopic
 from .vote import Vote, DebateVote
 
-# Import notification models from the notifications app
-try:
-    from notifications.models import Notification
-except ImportError:
-    # Fallback if notifications app is not available
-    Notification = None
-
 __all__ = [
     # Core models
     'DebateTopic',
@@ -30,7 +23,6 @@ __all__ = [
     'ModerationAction',
     'UserProfile',
     'SessionTranscript',
-    'Notification',
 
     # Base classes
     'TimestampedMixin',
