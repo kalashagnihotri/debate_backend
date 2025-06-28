@@ -88,7 +88,8 @@ class WorkingDebateEndpointsTestCase(APITestCase):
         self.topic = DebateTopic.objects.create(
             title='Test Topic',
             description='Test Description',
-            category='Education'
+            category='Education',
+            created_by=self.moderator
         )
 
     def test_topic_model_functionality(self):
@@ -96,7 +97,8 @@ class WorkingDebateEndpointsTestCase(APITestCase):
         topic = DebateTopic.objects.create(
             title='Model Test Topic',
             description='Testing the model',
-            category='Technology'
+            category='Technology',
+            created_by=self.moderator
         )
         
         self.assertEqual(topic.title, 'Model Test Topic')
@@ -185,6 +187,15 @@ class WorkingNotificationTestCase(APITestCase):
 class WorkingSecurityTestCase(APITestCase):
     """Test basic security measures."""
 
+    def setUp(self):
+        """Set up test data."""
+        self.moderator = User.objects.create_user(
+            username='moderator',
+            email='moderator@test.com',
+            password='ModeratorPass123!',
+            role='moderator'
+        )
+
     def test_password_hashing(self):
         """Test that passwords are properly hashed."""
         user = User.objects.create_user(
@@ -225,7 +236,8 @@ class WorkingSecurityTestCase(APITestCase):
         topic = DebateTopic.objects.create(
             title='Test <script>alert("xss")</script> Topic',
             description='Description with "quotes" and \'apostrophes\'',
-            category='Education'
+            category='Education',
+            created_by=self.moderator
         )
         
         # Data should be stored (sanitization happens at view/serializer level)
@@ -269,6 +281,15 @@ class WorkingValidationTestCase(APITestCase):
 class WorkingIntegrationTestCase(APITestCase):
     """Test basic integration scenarios."""
 
+    def setUp(self):
+        """Set up test data."""
+        self.moderator = User.objects.create_user(
+            username='moderator',
+            email='moderator@test.com',
+            password='ModeratorPass123!',
+            role='moderator'
+        )
+
     def test_user_registration_to_topic_viewing(self):
         """Test user can register and then view topics."""
         # Step 1: Register user
@@ -287,7 +308,8 @@ class WorkingIntegrationTestCase(APITestCase):
         topic = DebateTopic.objects.create(
             title='Integration Test Topic',
             description='A topic for integration testing',
-            category='Technology'
+            category='Technology',
+            created_by=self.moderator
         )
         
         # Step 3: New user should be able to view topics
