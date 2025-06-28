@@ -27,9 +27,11 @@ A production-ready Django REST API backend for real-time debate sessions with We
 
 ### Prerequisites
 - Python 3.9+
-- PostgreSQL 12+ (recommended for production)
+- PostgreSQL 12+ (required for all environments)
 - Redis 6+ (for WebSocket support and caching)
 - Git
+
+**Note**: This project requires PostgreSQL for all environments (development, testing, and production) due to PostgreSQL-specific database features and migrations. SQLite is not supported.
 
 ### 1. Clone and Setup
 ```bash
@@ -60,10 +62,12 @@ REDIS_URL=redis://localhost:6379/0
 
 ### 3. Database Setup
 
-#### PostgreSQL Setup (Recommended)
 ```bash
 # Install PostgreSQL
 # Windows: Download from https://www.postgresql.org/download/windows/
+# macOS: brew install postgresql
+# Ubuntu: sudo apt-get install postgresql postgresql-contrib
+
 # Create database and user
 psql -U postgres
 CREATE DATABASE debate_platform;
@@ -79,16 +83,6 @@ python manage.py createsuperuser
 
 # Load sample data (optional)
 python manage.py loaddata fixtures/sample_*.json
-```
-
-#### SQLite Setup (Development Only)
-```bash
-# Update .env file
-DATABASE_URL=sqlite:///db.sqlite3
-
-# Run migrations
-python manage.py migrate
-python manage.py createsuperuser
 ```
 
 ### 4. Start the Servers
@@ -1430,4 +1424,84 @@ daphne -b localhost -p 8002 onlineDebatePlatform.asgi:application
 
 # 4. Test with simple WebSocket message
 # Use the demo page at http://localhost:8000/demo/
+```
+
+### Database Requirements
+
+**PostgreSQL is required for all environments**. This project uses PostgreSQL-specific features and SQL syntax that are not compatible with SQLite or other databases.
+
+#### Installation Issues
+```bash
+# If you get import errors for psycopg2
+pip install psycopg2-binary
+
+# On macOS with M1/M2 chips
+brew install postgresql
+pip install psycopg2-binary
+
+# On Ubuntu/Debian
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+pip install psycopg2-binary
+```
+
+#### Migration Issues
+If migrations fail:
+```bash
+# Ensure PostgreSQL is running
+sudo service postgresql start  # Linux
+brew services start postgresql  # macOS
+
+# Reset migrations (if needed)
+python manage.py migrate debates zero
+python manage.py migrate
+```
+
+#### Cannot Send Messages
+```bash
+# Error: "You cannot send messages at this time"
+# Solution: Check user participation and session status
+
+# 1. Ensure user is a participant (not just viewer)
+python manage.py shell
+>>> from debates.models import Participation, DebateSession
+>>> from django.contrib.auth import get_user_model
+>>> User = get_user_model()
+
+# Check user participation
+>>> user = User.objects.get(username='your_username')
+>>> session = DebateSession.objects.get(id=1)
+>>> participation = Participation.objects.get(user=user, session=session)
+>>> print(f"Role: {participation.role}, Muted: {participation.is_muted}")
+
+# 2. Make user a participant if they're only a viewer
+>>> participation.role = 'participant'
+>>> participation.side = 'proposition'  # or 'opposition'
+>>> participation.is_participant = True
+>>> participation.save()
+
+# 3. Ensure session is in 'online' status (not 'open', 'closed', etc.)
+>>> session.status = 'online'
+>>> session.save()
+
+# 4. Quick development setup for session 1:
+python -c "
+import django, os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'onlineDebatePlatform.settings')
+django.setup()
+from debates.models import *
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+# Make session online and add admin as participant
+session = DebateSession.objects.get(id=1)
+session.status = 'online'
+session.save()
+
+admin = User.objects.get(username='admin_user')
+p, created = Participation.objects.get_or_create(
+    user=admin, session=session,
+    defaults={'role': 'participant', 'side': 'proposition', 'is_participant': True}
+)
+print('Session ready for messaging')
+"
 ```
