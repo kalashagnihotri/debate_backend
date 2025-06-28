@@ -16,6 +16,6 @@ class DebatesConfig(AppConfig):
     topics, messages, voting, and moderation features.
     """
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'debates'
-    verbose_name = 'Debate Management'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "debates"
+    verbose_name = "Debate Management"

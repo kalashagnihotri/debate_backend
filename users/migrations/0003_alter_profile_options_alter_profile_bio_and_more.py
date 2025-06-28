@@ -8,42 +8,66 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_profile_date_joined_profile_last_active'),
+        ("users", "0002_profile_date_joined_profile_last_active"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='profile',
-            options={'ordering': ['-last_active'], 'verbose_name': 'User Profile', 'verbose_name_plural': 'User Profiles'},
+            name="profile",
+            options={
+                "ordering": ["-last_active"],
+                "verbose_name": "User Profile",
+                "verbose_name_plural": "User Profiles",
+            },
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='bio',
-            field=models.TextField(blank=True, help_text='User biography or description', null=True),
+            model_name="profile",
+            name="bio",
+            field=models.TextField(
+                blank=True, help_text="User biography or description", null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='date_joined',
-            field=models.DateTimeField(auto_now_add=True, help_text='When the profile was created'),
+            model_name="profile",
+            name="date_joined",
+            field=models.DateTimeField(
+                auto_now_add=True, help_text="When the profile was created"
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='last_active',
-            field=models.DateTimeField(auto_now=True, help_text='Last time the user was active'),
+            model_name="profile",
+            name="last_active",
+            field=models.DateTimeField(
+                auto_now=True, help_text="Last time the user was active"
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='profile_picture',
-            field=models.CharField(blank=True, help_text='URL to user profile picture', max_length=255, null=True),
+            model_name="profile",
+            name="profile_picture",
+            field=models.CharField(
+                blank=True,
+                help_text="URL to user profile picture",
+                max_length=255,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='user',
-            field=models.OneToOneField(help_text='One-to-one relationship with User model', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="profile",
+            name="user",
+            field=models.OneToOneField(
+                help_text="One-to-one relationship with User model",
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.CharField(choices=[('student', 'Student'), ('moderator', 'Moderator')], default='student', help_text='User role determining platform permissions', max_length=10),
+            model_name="user",
+            name="role",
+            field=models.CharField(
+                choices=[("student", "Student"), ("moderator", "Moderator")],
+                default="student",
+                help_text="User role determining platform permissions",
+                max_length=10,
+            ),
         ),
     ]

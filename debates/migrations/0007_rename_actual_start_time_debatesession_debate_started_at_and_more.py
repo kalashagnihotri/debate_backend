@@ -9,124 +9,194 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('debates', '0006_rename_debate_ended_at_debatesession_actual_start_time_and_more'),
+        (
+            "debates",
+            "0006_rename_debate_ended_at_debatesession_actual_start_time_and_more",
+        ),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='debatesession',
-            old_name='actual_start_time',
-            new_name='debate_started_at',
+            model_name="debatesession",
+            old_name="actual_start_time",
+            new_name="debate_started_at",
         ),
         migrations.RemoveField(
-            model_name='debatesession',
-            name='max_duration_minutes',
+            model_name="debatesession",
+            name="max_duration_minutes",
         ),
         migrations.RemoveField(
-            model_name='debatesession',
-            name='min_duration_minutes',
+            model_name="debatesession",
+            name="min_duration_minutes",
         ),
         migrations.RemoveField(
-            model_name='debatesession',
-            name='winner_side',
+            model_name="debatesession",
+            name="winner_side",
         ),
         migrations.RemoveField(
-            model_name='debatevote',
-            name='vote',
+            model_name="debatevote",
+            name="vote",
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='winner_participant',
-            field=models.ForeignKey(blank=True, help_text='The participant who won the debate', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='won_debates', to=settings.AUTH_USER_MODEL),
+            model_name="debatesession",
+            name="winner_participant",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="The participant who won the debate",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="won_debates",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='debatevote',
-            name='voted_for',
-            field=models.ForeignKey(help_text='The participant being voted for', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='received_votes', to=settings.AUTH_USER_MODEL),
+            model_name="debatevote",
+            name="voted_for",
+            field=models.ForeignKey(
+                help_text="The participant being voted for",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="received_votes",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='action_label',
+            model_name="notification",
+            name="action_label",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='action_url',
+            model_name="notification",
+            name="action_url",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='delivered_at',
+            model_name="notification",
+            name="delivered_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='delivery_method',
-            field=models.CharField(choices=[('websocket', 'WebSocket'), ('email', 'Email'), ('both', 'Both')], default='websocket', max_length=20),
+            model_name="notification",
+            name="delivery_method",
+            field=models.CharField(
+                choices=[
+                    ("websocket", "WebSocket"),
+                    ("email", "Email"),
+                    ("both", "Both"),
+                ],
+                default="websocket",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='dismissed_at',
+            model_name="notification",
+            name="dismissed_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='expires_at',
+            model_name="notification",
+            name="expires_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='is_delivered',
+            model_name="notification",
+            name="is_delivered",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='is_dismissed',
+            model_name="notification",
+            name="is_dismissed",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='priority',
-            field=models.CharField(choices=[('low', 'Low'), ('normal', 'Normal'), ('high', 'High'), ('urgent', 'Urgent')], default='normal', max_length=10),
+            model_name="notification",
+            name="priority",
+            field=models.CharField(
+                choices=[
+                    ("low", "Low"),
+                    ("normal", "Normal"),
+                    ("high", "High"),
+                    ("urgent", "Urgent"),
+                ],
+                default="normal",
+                max_length=10,
+            ),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='read_at',
+            model_name="notification",
+            name="read_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='debatesession',
-            name='duration_minutes',
-            field=models.IntegerField(default=60, help_text='Debate duration in minutes (20-180)'),
+            model_name="debatesession",
+            name="duration_minutes",
+            field=models.IntegerField(
+                default=60, help_text="Debate duration in minutes (20-180)"
+            ),
         ),
         migrations.AlterField(
-            model_name='debatevote',
-            name='best_argument_message',
-            field=models.ForeignKey(blank=True, help_text='Best message/argument that influenced the vote', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='vote_selections', to='debates.message'),
+            model_name="debatevote",
+            name="best_argument_message",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Best message/argument that influenced the vote",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="vote_selections",
+                to="debates.message",
+            ),
         ),
         migrations.AlterField(
-            model_name='notification',
-            name='notification_type',
-            field=models.CharField(choices=[('session_invite', 'Session Invitation'), ('session_starting', 'Session Starting Soon'), ('joining_opened', 'Joining Window Opened'), ('joining_closing', 'Joining Window Closing Soon'), ('debate_started', 'Debate Chat Unlocked'), ('voting_started', 'Voting Period Started'), ('voting_ending', 'Voting Ending Soon'), ('session_finished', 'Session Completed'), ('session_cancelled', 'Session Cancelled'), ('moderation_action', 'Moderation Action'), ('vote_reminder', 'Vote Reminder'), ('mention', 'You Were Mentioned'), ('system', 'System Notification')], max_length=20),
+            model_name="notification",
+            name="notification_type",
+            field=models.CharField(
+                choices=[
+                    ("session_invite", "Session Invitation"),
+                    ("session_starting", "Session Starting Soon"),
+                    ("joining_opened", "Joining Window Opened"),
+                    ("joining_closing", "Joining Window Closing Soon"),
+                    ("debate_started", "Debate Chat Unlocked"),
+                    ("voting_started", "Voting Period Started"),
+                    ("voting_ending", "Voting Ending Soon"),
+                    ("session_finished", "Session Completed"),
+                    ("session_cancelled", "Session Cancelled"),
+                    ("moderation_action", "Moderation Action"),
+                    ("vote_reminder", "Vote Reminder"),
+                    ("mention", "You Were Mentioned"),
+                    ("system", "System Notification"),
+                ],
+                max_length=20,
+            ),
         ),
         migrations.AddIndex(
-            model_name='debatevote',
-            index=models.Index(fields=['session', 'voted_for'], name='debates_deb_session_e5aca5_idx'),
+            model_name="debatevote",
+            index=models.Index(
+                fields=["session", "voted_for"], name="debates_deb_session_e5aca5_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='debatevote',
-            index=models.Index(fields=['timestamp'], name='debates_deb_timesta_f24ebf_idx'),
+            model_name="debatevote",
+            index=models.Index(
+                fields=["timestamp"], name="debates_deb_timesta_f24ebf_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='notification',
-            index=models.Index(fields=['recipient', 'is_read'], name='debates_not_recipie_75ab5d_idx'),
+            model_name="notification",
+            index=models.Index(
+                fields=["recipient", "is_read"], name="debates_not_recipie_75ab5d_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='notification',
-            index=models.Index(fields=['notification_type', 'timestamp'], name='debates_not_notific_c8b0f7_idx'),
+            model_name="notification",
+            index=models.Index(
+                fields=["notification_type", "timestamp"],
+                name="debates_not_notific_c8b0f7_idx",
+            ),
         ),
         migrations.AddIndex(
-            model_name='notification',
-            index=models.Index(fields=['session', 'timestamp'], name='debates_not_session_1d8016_idx'),
+            model_name="notification",
+            index=models.Index(
+                fields=["session", "timestamp"], name="debates_not_session_1d8016_idx"
+            ),
         ),
     ]

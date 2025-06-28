@@ -10,60 +10,94 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('debates', '0002_participation_is_participant_participation_joined_at_and_more'),
+        (
+            "debates",
+            "0002_participation_is_participant_participation_joined_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='debatesession',
-            name='actual_start_time',
-            field=models.DateTimeField(blank=True, help_text='When debate actually started', null=True),
+            model_name="debatesession",
+            name="actual_start_time",
+            field=models.DateTimeField(
+                blank=True, help_text="When debate actually started", null=True
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="debatesession",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='debate_end_time',
-            field=models.DateTimeField(blank=True, help_text='When debate ends', null=True),
+            model_name="debatesession",
+            name="debate_end_time",
+            field=models.DateTimeField(
+                blank=True, help_text="When debate ends", null=True
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='duration_minutes',
-            field=models.IntegerField(default=60, help_text='Duration in minutes (20-180)'),
+            model_name="debatesession",
+            name="duration_minutes",
+            field=models.IntegerField(
+                default=60, help_text="Duration in minutes (20-180)"
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='joining_window_end',
-            field=models.DateTimeField(blank=True, help_text='When joining window closes', null=True),
+            model_name="debatesession",
+            name="joining_window_end",
+            field=models.DateTimeField(
+                blank=True, help_text="When joining window closes", null=True
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='scheduled_start',
-            field=models.DateTimeField(default=django.utils.timezone.now, help_text='When the debate is scheduled to start'),
+            model_name="debatesession",
+            name="scheduled_start",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                help_text="When the debate is scheduled to start",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='status',
-            field=models.CharField(choices=[('offline', 'Offline - Not Started'), ('open', 'Open - 5min Joining Window'), ('online', 'Online - Debate in Progress'), ('closed', 'Closed - Voting Period'), ('finished', 'Finished - Results Available')], default='offline', max_length=20),
+            model_name="debatesession",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("offline", "Offline - Not Started"),
+                    ("open", "Open - 5min Joining Window"),
+                    ("online", "Online - Debate in Progress"),
+                    ("closed", "Closed - Voting Period"),
+                    ("finished", "Finished - Results Available"),
+                ],
+                default="offline",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='updated_at',
+            model_name="debatesession",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='voting_end_time',
-            field=models.DateTimeField(blank=True, help_text='When voting period ends', null=True),
+            model_name="debatesession",
+            name="voting_end_time",
+            field=models.DateTimeField(
+                blank=True, help_text="When voting period ends", null=True
+            ),
         ),
         migrations.AddField(
-            model_name='debatesession',
-            name='winner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='won_debates', to=settings.AUTH_USER_MODEL),
+            model_name="debatesession",
+            name="winner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="won_debates",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -21,25 +21,25 @@ class ModerationActionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        session_id = self.request.query_params.get('session')
+        session_id = self.request.query_params.get("session")
         if session_id:
             queryset = queryset.filter(session_id=session_id)
         return queryset
 
-    @action(detail=True, methods=['get'], permission_classes=[])
+    @action(detail=True, methods=["get"], permission_classes=[])
     def transcript(self, request, pk=None):
         session = self.get_object()
         transcript = SessionTranscript.objects.filter(session=session).first()
         if not transcript:
-            return Response({'error': 'Transcript not found'}, status=404)
+            return Response({"error": "Transcript not found"}, status=404)
         serializer = SessionTranscriptSerializer(transcript)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
     def generate_transcript(self, request, pk=None):
         session = self.get_object()
         # Dummy implementation: create or update transcript
         transcript, _ = SessionTranscript.objects.get_or_create(session=session)
         transcript.generated_at = timezone.now()
         transcript.save()
-        return Response({'status': 'Transcript generated', 'id': transcript.id})
+        return Response({"status": "Transcript generated", "id": transcript.id})

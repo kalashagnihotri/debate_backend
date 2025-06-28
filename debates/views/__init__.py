@@ -12,11 +12,11 @@ from .transcript_views import SessionTranscriptViewSet
 from .vote_views import DebateVoteViewSet
 
 __all__ = [
-    'DebateTopicViewSet',
-    'DebateSessionViewSet',
-    'MessageViewSet',
-    'DebateVoteViewSet',
-    'UserProfileViewSet',
-    'SessionTranscriptViewSet',
-    'ModerationActionViewSet',
+    "DebateTopicViewSet",
+    "DebateSessionViewSet",
+    "MessageViewSet",
+    "DebateVoteViewSet",
+    "UserProfileViewSet",
+    "SessionTranscriptViewSet",
+    "ModerationActionViewSet",
 ]

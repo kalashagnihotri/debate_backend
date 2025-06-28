@@ -16,33 +16,40 @@ class SystemStatusChecker:
 
     def add_check(self, name, status, details="", performance=""):
         """Add a system check result"""
-        self.checks.append({
-            'name': name,
-            'status': status,
-            'details': details,
-            'performance': performance,
-            'timestamp': datetime.now().strftime('%H:%M:%S')
-        })
+        self.checks.append(
+            {
+                "name": name,
+                "status": status,
+                "details": details,
+                "performance": performance,
+                "timestamp": datetime.now().strftime("%H:%M:%S"),
+            }
+        )
 
     def login(self):
         """Test JWT authentication"""
         try:
-            response = requests.post(f"{self.base_url}/api/v1/token/", json={
-                "username": "testuser",
-                "password": "testpass123"
-            }, timeout=5)
+            response = requests.post(
+                f"{self.base_url}/api/v1/token/",
+                json={"username": "testuser", "password": "testpass123"},
+                timeout=5,
+            )
 
             if response.status_code == 200:
-                self.access_token = response.json()['access']
+                self.access_token = response.json()["access"]
                 self.add_check(
                     "JWT Authentication",
                     "✅ PASS",
-                    "Successfully obtained access token")
+                    "Successfully obtained access token",
+                )
                 return True
             else:
                 self.add_check(
-                    "JWT Authentication", "❌ FAIL", f"Status: {
-                        response.status_code}")
+                    "JWT Authentication",
+                    "❌ FAIL",
+                    f"Status: {
+                        response.status_code}",
+                )
                 return False
         except Exception as e:
             self.add_check("JWT Authentication", "❌ FAIL", f"Exception: {e}")
@@ -53,7 +60,8 @@ class SystemStatusChecker:
         try:
             start_time = time.time()
             response = requests.get(
-                f"{self.base_url}/api/v1/debates/topics/", timeout=5)
+                f"{self.base_url}/api/v1/debates/topics/", timeout=5
+            )
             response_time = (time.time() - start_time) * 1000
 
             if response.status_code == 200:
@@ -62,13 +70,16 @@ class SystemStatusChecker:
                     "Django API Server",
                     "✅ PASS",
                     f"Topics endpoint working. Found {len(data)} topics",
-                    f"{response_time:.2f}ms"
+                    f"{response_time:.2f}ms",
                 )
                 return True
             else:
                 self.add_check(
-                    "Django API Server", "❌ FAIL", f"Status: {
-                        response.status_code}")
+                    "Django API Server",
+                    "❌ FAIL",
+                    f"Status: {
+                        response.status_code}",
+                )
                 return False
         except Exception as e:
             self.add_check("Django API Server", "❌ FAIL", f"Exception: {e}")
@@ -82,14 +93,16 @@ class SystemStatusChecker:
                 self.add_check(
                     "Daphne WebSocket Server",
                     "✅ PASS",
-                    "Server responding (404 expected for root)")
+                    "Server responding (404 expected for root)",
+                )
                 return True
             else:
                 self.add_check(
                     "Daphne WebSocket Server",
                     "⚠️ WARN",
                     f"Unexpected status: {
-                        response.status_code}")
+                        response.status_code}",
+                )
                 return False
         except Exception as e:
             self.add_check("Daphne WebSocket Server", "❌ FAIL", f"Exception: {e}")
@@ -99,13 +112,14 @@ class SystemStatusChecker:
         """Test WebSocket connection"""
         if not self.access_token:
             self.add_check(
-                "WebSocket Connection",
-                "❌ FAIL",
-                "No access token available")
+                "WebSocket Connection", "❌ FAIL", "No access token available"
+            )
             return False
 
         try:
-            websocket_url = f"{self.websocket_url}/ws/debates/6/?token={self.access_token}"
+            websocket_url = (
+                f"{self.websocket_url}/ws/debates/6/?token={self.access_token}"
+            )
 
             start_time = time.time()
             async with websockets.connect(websocket_url, timeout=5) as websocket:
@@ -121,7 +135,7 @@ class SystemStatusChecker:
                     "WebSocket Connection",
                     "✅ PASS",
                     "Successfully connected and exchanged messages",
-                    f"{connection_time:.2f}ms"
+                    f"{connection_time:.2f}ms",
                 )
                 return True
 
@@ -135,7 +149,8 @@ class SystemStatusChecker:
             # Test read operations
             start_time = time.time()
             response = requests.get(
-                f"{self.base_url}/api/v1/debates/sessions/", timeout=5)
+                f"{self.base_url}/api/v1/debates/sessions/", timeout=5
+            )
             read_time = (time.time() - start_time) * 1000
 
             if response.status_code == 200:
@@ -144,7 +159,7 @@ class SystemStatusChecker:
                     "Database Read Operations",
                     "✅ PASS",
                     f"Successfully read {len(sessions)} sessions",
-                    f"{read_time:.2f}ms"
+                    f"{read_time:.2f}ms",
                 )
                 return True
             else:
@@ -152,7 +167,8 @@ class SystemStatusChecker:
                     "Database Read Operations",
                     "❌ FAIL",
                     f"Status: {
-                        response.status_code}")
+                        response.status_code}",
+                )
                 return False
         except Exception as e:
             self.add_check("Database Read Operations", "❌ FAIL", f"Exception: {e}")
@@ -167,15 +183,15 @@ class SystemStatusChecker:
                     "Origin": "http://localhost:3000",
                     "Access-Control-Request-Method": "GET",
                 },
-                timeout=5
+                timeout=5,
             )
 
-            cors_headers = response.headers.get('Access-Control-Allow-Origin')
+            cors_headers = response.headers.get("Access-Control-Allow-Origin")
             if cors_headers:
                 self.add_check(
                     "CORS Configuration",
                     "✅ PASS",
-                    f"CORS headers present: {cors_headers}"
+                    f"CORS headers present: {cors_headers}",
                 )
                 return True
             else:
@@ -194,16 +210,22 @@ class SystemStatusChecker:
             ("Token Refresh", "/api/v1/token/refresh/", False),
         ]
 
-        headers = {
-            "Authorization": f"Bearer {
-                self.access_token}"} if self.access_token else {}
+        headers = (
+            {
+                "Authorization": f"Bearer {
+                self.access_token}"
+            }
+            if self.access_token
+            else {}
+        )
 
         for name, endpoint, requires_auth in endpoints:
             try:
                 start_time = time.time()
                 request_headers = headers if requires_auth else {}
                 response = requests.get(
-                    f"{self.base_url}{endpoint}", headers=request_headers, timeout=5)
+                    f"{self.base_url}{endpoint}", headers=request_headers, timeout=5
+                )
                 response_time = (time.time() - start_time) * 1000
 
                 if response.status_code == 200:
@@ -211,17 +233,25 @@ class SystemStatusChecker:
                         f"API Endpoint: {name}",
                         "✅ PASS",
                         "\1",
-                        f"{response_time:.2f}ms"
+                        f"{response_time:.2f}ms",
                     )
-                elif response.status_code == 401 and requires_auth and not self.access_token:
+                elif (
+                    response.status_code == 401
+                    and requires_auth
+                    and not self.access_token
+                ):
                     self.add_check(
                         f"API Endpoint: {name}",
                         "⚠️ WARN",
-                        "Authentication required (expected)")
+                        "Authentication required (expected)",
+                    )
                 else:
                     self.add_check(
-                        f"API Endpoint: {name}", "❌ FAIL", f"Status: {
-                            response.status_code}")
+                        f"API Endpoint: {name}",
+                        "❌ FAIL",
+                        f"Status: {
+                            response.status_code}",
+                    )
             except Exception as e:
                 self.add_check(f"API Endpoint: {name}", "❌ FAIL", f"Exception: {e}")
 
@@ -231,14 +261,16 @@ class SystemStatusChecker:
             response = requests.get("http://localhost:3000", timeout=5)
             if response.status_code == 200:
                 self.add_check(
-                    "Frontend Server",
-                    "✅ PASS",
-                    "React development server running")
+                    "Frontend Server", "✅ PASS", "React development server running"
+                )
                 return True
             else:
                 self.add_check(
-                    "Frontend Server", "❌ FAIL", f"Status: {
-                        response.status_code}")
+                    "Frontend Server",
+                    "❌ FAIL",
+                    f"Status: {
+                        response.status_code}",
+                )
                 return False
         except Exception as e:
             self.add_check("Frontend Server", "❌ FAIL", f"Connection failed: {e}")
@@ -253,9 +285,9 @@ class SystemStatusChecker:
         print(f"🔍 Total Checks: {len(self.checks)}")
 
         # Count status types
-        passed = len([c for c in self.checks if "✅" in c['status']])
-        failed = len([c for c in self.checks if "❌" in c['status']])
-        warnings = len([c for c in self.checks if "⚠️" in c['status']])
+        passed = len([c for c in self.checks if "✅" in c["status"]])
+        failed = len([c for c in self.checks if "❌" in c["status"]])
+        warnings = len([c for c in self.checks if "⚠️" in c["status"]])
 
         print(f"✅ Passed: {passed} | ❌ Failed: {failed} | ⚠️ Warnings: {warnings}")
 
@@ -275,14 +307,14 @@ class SystemStatusChecker:
 
         for check in self.checks:
             print(f"[{check['timestamp']}] {check['status']} {check['name']}")
-            if check['details']:
+            if check["details"]:
                 print(f"    📝 {check['details']}")
-            if check['performance']:
+            if check["performance"]:
                 print(f"    ⚡ Performance: {check['performance']}")
             print()
 
         # Performance summary
-        performance_checks = [c for c in self.checks if c['performance']]
+        performance_checks = [c for c in self.checks if c["performance"]]
         if performance_checks:
             print("-" * 80)
             print("⚡ PERFORMANCE SUMMARY")
@@ -340,6 +372,7 @@ async def main():
     else:
         print("⚠️ System requires attention before production deployment.")
         return 1
+
 
 if __name__ == "__main__":
     exit_code = asyncio.run(main())

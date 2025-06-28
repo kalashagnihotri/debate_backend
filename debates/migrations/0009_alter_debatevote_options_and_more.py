@@ -7,35 +7,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('debates', '0008_alter_debatevote_voted_for'),
+        ("debates", "0008_alter_debatevote_voted_for"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='debatevote',
-            options={'ordering': ['timestamp']},
+            name="debatevote",
+            options={"ordering": ["timestamp"]},
         ),
         migrations.RemoveIndex(
-            model_name='debatevote',
-            name='debates_deb_session_e5aca5_idx',
+            model_name="debatevote",
+            name="debates_deb_session_e5aca5_idx",
         ),
         migrations.RemoveField(
-            model_name='debatevote',
-            name='voted_for',
+            model_name="debatevote",
+            name="voted_for",
         ),
         migrations.AddField(
-            model_name='debatevote',
-            name='vote',
-            field=models.CharField(choices=[('proposition', 'Proposition'), ('opposition', 'Opposition')], default=django.utils.timezone.now, help_text='Which side the voter believes won', max_length=20),
+            model_name="debatevote",
+            name="vote",
+            field=models.CharField(
+                choices=[("proposition", "Proposition"), ("opposition", "Opposition")],
+                default=django.utils.timezone.now,
+                help_text="Which side the voter believes won",
+                max_length=20,
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='participation',
-            name='side',
-            field=models.CharField(blank=True, choices=[('proposition', 'Proposition'), ('opposition', 'Opposition')], help_text='Which side the participant is debating for (only for participants)', max_length=20, null=True),
+            model_name="participation",
+            name="side",
+            field=models.CharField(
+                blank=True,
+                choices=[("proposition", "Proposition"), ("opposition", "Opposition")],
+                help_text="Which side the participant is debating for (only for participants)",
+                max_length=20,
+                null=True,
+            ),
         ),
         migrations.AddIndex(
-            model_name='debatevote',
-            index=models.Index(fields=['session', 'vote'], name='debates_deb_session_4da52a_idx'),
+            model_name="debatevote",
+            index=models.Index(
+                fields=["session", "vote"], name="debates_deb_session_4da52a_idx"
+            ),
         ),
     ]

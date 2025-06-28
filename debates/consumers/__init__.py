@@ -7,6 +7,6 @@ from .debate_consumer import DebateConsumer
 from .notification_consumer import NotificationConsumer
 
 __all__ = [
-    'NotificationConsumer',
-    'DebateConsumer',
+    "NotificationConsumer",
+    "DebateConsumer",
 ]

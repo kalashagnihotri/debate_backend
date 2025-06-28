@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def auth_status(request):
     """
@@ -26,12 +26,15 @@ def auth_status(request):
     Returns:
         Response: JSON response with authentication status and user data.
     """
-    return Response({
-        'authenticated': True,
-        'user': {
-            'id': request.user.id,
-            'username': request.user.username,
-            'email': request.user.email,
-            'role': getattr(request.user, 'role', 'user'),  # Safe role access
-        }
-    }, status=status.HTTP_200_OK)
+    return Response(
+        {
+            "authenticated": True,
+            "user": {
+                "id": request.user.id,
+                "username": request.user.username,
+                "email": request.user.email,
+                "role": getattr(request.user, "role", "user"),  # Safe role access
+            },
+        },
+        status=status.HTTP_200_OK,
+    )

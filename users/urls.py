@@ -20,22 +20,19 @@ from .views import (
 
 # Router for ViewSet-based endpoints
 router = DefaultRouter()
-router.register(r'profiles', ProfileViewSet, basename='profile')
+router.register(r"profiles", ProfileViewSet, basename="profile")
 
 urlpatterns = [
     # User authentication and registration
-    path('register/', UserRegistrationView.as_view(), name='register'),
-    path('auth-status/', auth_status, name='auth-status'),
-
+    path("register/", UserRegistrationView.as_view(), name="register"),
+    path("auth-status/", auth_status, name="auth-status"),
     # User profile endpoints
-    path('profile/', CurrentUserProfileView.as_view(), name='user-profile'),
-    path('me/', CurrentUserProfileView.as_view(), name='current-user-profile'),
-    path('stats/', UserStatsView.as_view(), name='user-stats'),
-
+    path("profile/", CurrentUserProfileView.as_view(), name="user-profile"),
+    path("me/", CurrentUserProfileView.as_view(), name="current-user-profile"),
+    path("stats/", UserStatsView.as_view(), name="user-stats"),
     # User CRUD endpoints
-    path('', UserListView.as_view(), name='user-list'),
-    path('<int:pk>/', UserDetailView.as_view(), name='user-detail'),
-
+    path("", UserListView.as_view(), name="user-list"),
+    path("<int:pk>/", UserDetailView.as_view(), name="user-detail"),
     # Router-based endpoints
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

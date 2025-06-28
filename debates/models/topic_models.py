@@ -7,25 +7,24 @@ from django.db import models
 
 class DebateTopic(models.Model):
     CATEGORY_CHOICES = [
-        ('politics', 'Politics'),
-        ('technology', 'Technology'),
-        ('education', 'Education'),
-        ('environment', 'Environment'),
-        ('healthcare', 'Healthcare'),
-        ('economics', 'Economics'),
-        ('social', 'Social Issues'),
-        ('science', 'Science'),
-        ('entertainment', 'Entertainment'),
-        ('sports', 'Sports'),
-        ('other', 'Other'),
+        ("politics", "Politics"),
+        ("technology", "Technology"),
+        ("education", "Education"),
+        ("environment", "Environment"),
+        ("healthcare", "Healthcare"),
+        ("economics", "Economics"),
+        ("social", "Social Issues"),
+        ("science", "Science"),
+        ("entertainment", "Entertainment"),
+        ("sports", "Sports"),
+        ("other", "Other"),
     ]
 
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        default='other')
+        max_length=20, choices=CATEGORY_CHOICES, default="other"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -33,4 +32,4 @@ class DebateTopic(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]

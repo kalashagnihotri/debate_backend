@@ -16,5 +16,5 @@ class UsersConfig(AppConfig):
     and user-related functionality for the debate platform.
     """
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "users"

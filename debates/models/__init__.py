@@ -14,17 +14,16 @@ from .vote import Vote, DebateVote
 
 __all__ = [
     # Core models
-    'DebateTopic',
-    'DebateSession',
-    'Participation',
-    'Message',
-    'Vote',
-    'DebateVote',  # For backward compatibility
-    'ModerationAction',
-    'UserProfile',
-    'SessionTranscript',
-
+    "DebateTopic",
+    "DebateSession",
+    "Participation",
+    "Message",
+    "Vote",
+    "DebateVote",  # For backward compatibility
+    "ModerationAction",
+    "UserProfile",
+    "SessionTranscript",
     # Base classes
-    'TimestampedMixin',
-    'StatusMixin',
+    "TimestampedMixin",
+    "StatusMixin",
 ]

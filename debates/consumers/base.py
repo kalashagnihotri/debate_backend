@@ -35,7 +35,7 @@ class BaseConsumerMixin:
         """
         try:
             access_token = AccessToken(token)
-            user_id = access_token['user_id']
+            user_id = access_token["user_id"]
             return User.objects.get(id=user_id)
         except Exception:
             return None
@@ -50,11 +50,11 @@ class BaseConsumerMixin:
         Returns:
             str or None: JWT token if found, None otherwise
         """
-        query_string = self.scope.get('query_string', b'').decode()
+        query_string = self.scope.get("query_string", b"").decode()
         token = None
-        for param in query_string.split('&'):
-            if param.startswith('token='):
-                token = param.split('=')[1]
+        for param in query_string.split("&"):
+            if param.startswith("token="):
+                token = param.split("=")[1]
                 break
         return token
 

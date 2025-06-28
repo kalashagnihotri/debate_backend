@@ -10,30 +10,29 @@ from .base import TimestampedMixin
 
 class ModerationAction(TimestampedMixin):
     ACTION_CHOICES = [
-        ('warn', 'Warning'),
-        ('mute', 'Mute'),
-        ('unmute', 'Unmute'),
-        ('remove', 'Remove Participant'),
-        ('ban', 'Ban User'),
-        ('timeout', 'Timeout'),
-        ('force_phase_transition', 'Force Phase Transition'),
+        ("warn", "Warning"),
+        ("mute", "Mute"),
+        ("unmute", "Unmute"),
+        ("remove", "Remove Participant"),
+        ("ban", "Ban User"),
+        ("timeout", "Timeout"),
+        ("force_phase_transition", "Force Phase Transition"),
     ]
 
     session = models.ForeignKey(
-        'DebateSession',
-        on_delete=models.CASCADE,
-        related_name='moderation_actions')
+        "DebateSession", on_delete=models.CASCADE, related_name="moderation_actions"
+    )
     moderator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='moderation_actions_taken'
+        related_name="moderation_actions_taken",
     )
     target_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='moderation_actions_received',
+        related_name="moderation_actions_received",
         null=True,
-        blank=True
+        blank=True,
     )
     action = models.CharField(max_length=30, choices=ACTION_CHOICES)
     reason = models.TextField(blank=True)
@@ -44,17 +43,21 @@ class ModerationAction(TimestampedMixin):
     expires_at = models.DateTimeField(null=True, blank=True)
 
     # Additional context
-    severity = models.CharField(max_length=10, choices=[
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
-        ('critical', 'Critical')
-    ], default='medium')
+    severity = models.CharField(
+        max_length=10,
+        choices=[
+            ("low", "Low"),
+            ("medium", "Medium"),
+            ("high", "High"),
+            ("critical", "Critical"),
+        ],
+        default="medium",
+    )
 
     class Meta:
-        ordering = ['-timestamp']
-        verbose_name = 'Moderation Action'
-        verbose_name_plural = 'Moderation Actions'
+        ordering = ["-timestamp"]
+        verbose_name = "Moderation Action"
+        verbose_name_plural = "Moderation Actions"
 
     def __str__(self):
         target = self.target_user.username if self.target_user else "Session"
@@ -63,6 +66,7 @@ class ModerationAction(TimestampedMixin):
 
 class UserProfile(TimestampedMixin):
     """Extended user profile for debate platform"""
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # Profile information
@@ -93,8 +97,8 @@ class UserProfile(TimestampedMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'User Profile'
-        verbose_name_plural = 'User Profiles'
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
@@ -115,21 +119,21 @@ class UserProfile(TimestampedMixin):
     def reputation_level(self):
         """Get reputation level based on score"""
         if self.reputation_score < 100:
-            return 'Novice'
+            return "Novice"
         elif self.reputation_score < 500:
-            return 'Intermediate'
+            return "Intermediate"
         elif self.reputation_score < 1000:
-            return 'Advanced'
+            return "Advanced"
         else:
-            return 'Expert'
+            return "Expert"
 
 
 class SessionTranscript(TimestampedMixin):
     """Transcript of a debate session"""
+
     session = models.OneToOneField(
-        'DebateSession',
-        on_delete=models.CASCADE,
-        related_name='transcript')
+        "DebateSession", on_delete=models.CASCADE, related_name="transcript"
+    )
 
     # Transcript content
     content = models.TextField(blank=True)
@@ -141,7 +145,7 @@ class SessionTranscript(TimestampedMixin):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='generated_transcripts'
+        related_name="generated_transcripts",
     )
 
     # Processing status
@@ -155,8 +159,8 @@ class SessionTranscript(TimestampedMixin):
     word_count = models.IntegerField(default=0)
 
     class Meta:
-        verbose_name = 'Session Transcript'
-        verbose_name_plural = 'Session Transcripts'
+        verbose_name = "Session Transcript"
+        verbose_name_plural = "Session Transcripts"
 
     def __str__(self):
         return f"Transcript for {self.session}"

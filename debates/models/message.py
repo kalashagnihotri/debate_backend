@@ -20,21 +20,22 @@ class Message(TimestampedMixin):
     Handles various message types including text, images, system messages,
     and reactions. Includes support for threading, moderation, and engagement metrics.
     """
+
     MESSAGE_TYPE_CHOICES = [
-        ('text', 'Text'),
-        ('image', 'Image'),
-        ('system', 'System'),
-        ('announcement', 'Announcement'),
-        ('reaction', 'Reaction'),
+        ("text", "Text"),
+        ("image", "Image"),
+        ("system", "System"),
+        ("announcement", "Announcement"),
+        ("reaction", "Reaction"),
     ]
 
     session = models.ForeignKey(
-        'DebateSession', related_name='messages', on_delete=models.CASCADE
+        "DebateSession", related_name="messages", on_delete=models.CASCADE
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     message_type = models.CharField(
-        max_length=20, choices=MESSAGE_TYPE_CHOICES, default='text'
+        max_length=20, choices=MESSAGE_TYPE_CHOICES, default="text"
     )
 
     # Message metadata
@@ -57,8 +58,7 @@ class Message(TimestampedMixin):
 
     # Reply threading
     reply_to = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.CASCADE,
-        related_name='replies'
+        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="replies"
     )
 
     # Moderation
@@ -67,9 +67,9 @@ class Message(TimestampedMixin):
     is_hidden = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['timestamp']
-        verbose_name = 'Message'
-        verbose_name_plural = 'Messages'
+        ordering = ["timestamp"]
+        verbose_name = "Message"
+        verbose_name_plural = "Messages"
 
     def __str__(self):
         return f"{self.user.username}: {self.content[:50]}"

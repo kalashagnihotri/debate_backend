@@ -36,9 +36,9 @@ class DebateTopicViewSet(viewsets.ModelViewSet):
         Returns:
             list: List of permission class instances
         """
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             permission_classes = [IsAuthenticated, IsModerator]
-        elif self.action in ['list', 'retrieve']:
+        elif self.action in ["list", "retrieve"]:
             permission_classes = []  # Public access for viewing topics
         else:
             permission_classes = [IsAuthenticated]

@@ -18,15 +18,15 @@ class User(AbstractUser):
     """
 
     ROLE_CHOICES = [
-        ('student', 'Student'),
-        ('moderator', 'Moderator'),
+        ("student", "Student"),
+        ("moderator", "Moderator"),
     ]
 
     role = models.CharField(
         max_length=10,
         choices=ROLE_CHOICES,
-        default='student',
-        help_text="User role determining platform permissions"
+        default="student",
+        help_text="User role determining platform permissions",
     )
 
     def __str__(self):
@@ -42,10 +42,8 @@ class User(AbstractUser):
             int: Number of debates where user was an active participant
         """
         from debates.models import Participation
-        return Participation.objects.filter(
-            user=self,
-            role='participant'
-        ).count()
+
+        return Participation.objects.filter(user=self, role="participant").count()
 
     @property
     def total_debates_won(self):
@@ -70,6 +68,7 @@ class User(AbstractUser):
             int: Number of messages authored by this user
         """
         from debates.models import Message
+
         return Message.objects.filter(user=self).count()
 
 
@@ -83,33 +82,27 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        help_text="One-to-one relationship with User model"
+        help_text="One-to-one relationship with User model",
     )
     bio = models.TextField(
-        blank=True,
-        null=True,
-        help_text="User biography or description"
+        blank=True, null=True, help_text="User biography or description"
     )
     profile_picture = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        help_text="URL to user profile picture"
+        max_length=255, blank=True, null=True, help_text="URL to user profile picture"
     )
     date_joined = models.DateTimeField(
-        auto_now_add=True,
-        help_text="When the profile was created"
+        auto_now_add=True, help_text="When the profile was created"
     )
     last_active = models.DateTimeField(
-        auto_now=True,
-        help_text="Last time the user was active"
+        auto_now=True, help_text="Last time the user was active"
     )
 
     class Meta:
         """Meta options for Profile model."""
-        verbose_name = 'User Profile'
-        verbose_name_plural = 'User Profiles'
-        ordering = ['-last_active']
+
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
+        ordering = ["-last_active"]
 
     def __str__(self):
         """Return string representation of profile."""

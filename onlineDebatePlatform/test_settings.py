@@ -7,25 +7,26 @@ from .settings import *
 
 # Override database to use SQLite for tests
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',  # Use in-memory database for faster tests
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",  # Use in-memory database for faster tests
     }
 }
 
 # Use dummy cache for tests
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
 
 # Use dummy channel layer for tests
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
+
 
 # Disable migrations for faster tests
 class DisableMigrations:
@@ -35,24 +36,25 @@ class DisableMigrations:
     def __getitem__(self, item):
         return None
 
+
 # MIGRATION_MODULES = DisableMigrations()
 
 # Test-specific settings
 PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.MD5PasswordHasher',  # Fast for tests
+    "django.contrib.auth.hashers.MD5PasswordHasher",  # Fast for tests
 ]
 
 # Disable logging during tests
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'null': {
-            'class': 'logging.NullHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "null": {
+            "class": "logging.NullHandler",
         },
     },
-    'root': {
-        'handlers': ['null'],
+    "root": {
+        "handlers": ["null"],
     },
 }
 

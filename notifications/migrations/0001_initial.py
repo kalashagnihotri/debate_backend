@@ -16,35 +16,105 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='NotificationPreference',
+            name="NotificationPreference",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email_notifications', models.BooleanField(default=True)),
-                ('push_notifications', models.BooleanField(default=True)),
-                ('debate_start_notifications', models.BooleanField(default=True)),
-                ('voting_notifications', models.BooleanField(default=True)),
-                ('moderator_action_notifications', models.BooleanField(default=True)),
-                ('notification_frequency', models.CharField(choices=[('immediate', 'Immediate'), ('hourly', 'Hourly Digest'), ('daily', 'Daily Digest')], default='immediate', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='notification_preferences', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email_notifications", models.BooleanField(default=True)),
+                ("push_notifications", models.BooleanField(default=True)),
+                ("debate_start_notifications", models.BooleanField(default=True)),
+                ("voting_notifications", models.BooleanField(default=True)),
+                ("moderator_action_notifications", models.BooleanField(default=True)),
+                (
+                    "notification_frequency",
+                    models.CharField(
+                        choices=[
+                            ("immediate", "Immediate"),
+                            ("hourly", "Hourly Digest"),
+                            ("daily", "Daily Digest"),
+                        ],
+                        default="immediate",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="notification_preferences",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('message', models.TextField(help_text='The notification message content')),
-                ('type', models.CharField(choices=[('UPCOMING_DEBATE', 'Upcoming Debate'), ('SESSION_CHANGE', 'Session Change'), ('MODERATION_ACTION', 'Moderation Action')], help_text='Type of notification', max_length=50)),
-                ('is_read', models.BooleanField(default=False, help_text='Whether the notification has been read')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, help_text='When the notification was created')),
-                ('user', models.ForeignKey(help_text='The user who will receive this notification', on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                (
+                    "message",
+                    models.TextField(help_text="The notification message content"),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("UPCOMING_DEBATE", "Upcoming Debate"),
+                            ("SESSION_CHANGE", "Session Change"),
+                            ("MODERATION_ACTION", "Moderation Action"),
+                        ],
+                        help_text="Type of notification",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "is_read",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Whether the notification has been read",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        help_text="When the notification was created",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        help_text="The user who will receive this notification",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="notifications",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Notification',
-                'verbose_name_plural': 'Notifications',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['user', '-created_at'], name='notificatio_user_id_05b4bc_idx'), models.Index(fields=['user', 'is_read'], name='notificatio_user_id_427e4b_idx'), models.Index(fields=['type'], name='notificatio_type_ea918f_idx')],
+                "verbose_name": "Notification",
+                "verbose_name_plural": "Notifications",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(
+                        fields=["user", "-created_at"],
+                        name="notificatio_user_id_05b4bc_idx",
+                    ),
+                    models.Index(
+                        fields=["user", "is_read"],
+                        name="notificatio_user_id_427e4b_idx",
+                    ),
+                    models.Index(fields=["type"], name="notificatio_type_ea918f_idx"),
+                ],
             },
         ),
     ]

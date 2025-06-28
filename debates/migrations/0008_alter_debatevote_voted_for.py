@@ -9,13 +9,23 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('debates', '0007_rename_actual_start_time_debatesession_debate_started_at_and_more'),
+        (
+            "debates",
+            "0007_rename_actual_start_time_debatesession_debate_started_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='debatevote',
-            name='voted_for',
-            field=models.ForeignKey(blank=True, help_text='The participant being voted for', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='received_votes', to=settings.AUTH_USER_MODEL),
+            model_name="debatevote",
+            name="voted_for",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="The participant being voted for",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="received_votes",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

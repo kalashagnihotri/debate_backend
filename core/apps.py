@@ -16,6 +16,6 @@ class CoreConfig(AppConfig):
     services, and base components used across the debate platform.
     """
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core'
-    verbose_name = 'Core Application'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "core"
+    verbose_name = "Core Application"

@@ -19,6 +19,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     Provides CRUD operations for messages with proper filtering
     by session and chronological ordering.
     """
+
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
 
@@ -29,9 +30,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         Returns:
             QuerySet: Filtered message objects ordered by timestamp.
         """
-        session_pk = self.request.query_params.get('session_pk')
+        session_pk = self.request.query_params.get("session_pk")
         if session_pk:
-            return Message.objects.filter(
-                session_id=session_pk
-            ).order_by('timestamp')
+            return Message.objects.filter(session_id=session_pk).order_by("timestamp")
         return Message.objects.all()

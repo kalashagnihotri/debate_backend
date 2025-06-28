@@ -1,6 +1,7 @@
 """
 Service for handling voting logic and winner calculation.
 """
+
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 
@@ -30,9 +31,7 @@ class VotingService:
         vote_counts = {}
         for participant in participants:
             vote_count = Participation.objects.filter(
-                session=session,
-                voted_for=participant,
-                has_voted=True
+                session=session, voted_for=participant, has_voted=True
             ).count()
             vote_counts[participant] = vote_count
 
@@ -51,7 +50,7 @@ class VotingService:
 
         # Update total votes count
         session.total_votes = sum(vote_counts.values())
-        session.save(update_fields=['total_votes'])
+        session.save(update_fields=["total_votes"])
 
         return winners[0]
 
@@ -61,16 +60,17 @@ class VotingService:
         from users.models import User
 
         # Get or create user profile for stats tracking
-        if hasattr(user, 'profile'):
+        if hasattr(user, "profile"):
             profile = user.profile
         else:
             from users.models import Profile
+
             profile, created = Profile.objects.get_or_create(user=user)
 
         # Update win count (we'll add this field to Profile model)
-        if hasattr(profile, 'debates_won'):
+        if hasattr(profile, "debates_won"):
             profile.debates_won += 1
-            profile.save(update_fields=['debates_won'])
+            profile.save(update_fields=["debates_won"])
 
     @staticmethod
     def can_user_vote(user, session):
@@ -110,9 +110,7 @@ class VotingService:
         # Validate voted_for_user is a participant
         try:
             Participation.objects.get(
-                user=voted_for_user,
-                session=session,
-                role=ParticipantRole.PARTICIPANT
+                user=voted_for_user, session=session, role=ParticipantRole.PARTICIPANT
             )
         except Participation.DoesNotExist:
             raise ValueError("Can only vote for active participants")
@@ -123,9 +121,7 @@ class VotingService:
         voter_participation.voted_for = voted_for_user
         voter_participation.vote_timestamp = timezone.now()
         voter_participation.save(
-            update_fields=[
-                'has_voted',
-                'voted_for',
-                'vote_timestamp'])
+            update_fields=["has_voted", "voted_for", "vote_timestamp"]
+        )
 
         return True

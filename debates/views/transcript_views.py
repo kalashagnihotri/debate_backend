@@ -19,6 +19,7 @@ class SessionTranscriptViewSet(viewsets.ModelViewSet):
     Provides CRUD operations for debate session transcripts
     with proper authentication requirements.
     """
+
     serializer_class = SessionTranscriptSerializer
     permission_classes = [IsAuthenticated]
 

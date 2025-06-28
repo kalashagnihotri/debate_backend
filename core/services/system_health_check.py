@@ -45,8 +45,9 @@ class SystemHealthChecker:
         print(f"🏥 {title}")
         print("=" * 70)
 
-    def print_result(self, component: str, test_name: str, success: bool,
-                     details: str = "") -> None:
+    def print_result(
+        self, component: str, test_name: str, success: bool, details: str = ""
+    ) -> None:
         """
         Print and record a test result.
 
@@ -63,14 +64,11 @@ class SystemHealthChecker:
 
         if component not in self.results:
             self.results[component] = []
-        self.results[component].append({
-            'test': test_name,
-            'success': success,
-            'details': details
-        })
+        self.results[component].append(
+            {"test": test_name, "success": success, "details": details}
+        )
 
-    def check_port_availability(self, host: str, port: int,
-                                service_name: str) -> bool:
+    def check_port_availability(self, host: str, port: int, service_name: str) -> bool:
         """
         Check if a port is available and responding.
 
@@ -93,7 +91,7 @@ class SystemHealthChecker:
                     "Network",
                     f"{service_name} Port {port}",
                     True,
-                    f"Port {port} is open"
+                    f"Port {port} is open",
                 )
                 return True
             else:
@@ -101,7 +99,8 @@ class SystemHealthChecker:
                     "Network",
                     f"{service_name} Port {port}",
                     False,
-                    f"Port {port} is closed")
+                    f"Port {port} is closed",
+                )
                 return False
         except Exception as e:
             self.print_result("Network", f"{service_name} Port {port}", False, str(e))
@@ -115,13 +114,15 @@ class SystemHealthChecker:
         try:
             response = self.session.get(f"{self.api_base}/debates/topics/", timeout=5)
             success = response.status_code == 200
-            self.print_result("Django", "API Connectivity", success,
-                              f"Status: {response.status_code}")
+            self.print_result(
+                "Django", "API Connectivity", success, f"Status: {response.status_code}"
+            )
 
             if success:
                 topics = response.json()
-                self.print_result("Django", "Data Retrieval", True,
-                                  f"Retrieved {len(topics)} topics")
+                self.print_result(
+                    "Django", "Data Retrieval", True, f"Retrieved {len(topics)} topics"
+                )
         except Exception as e:
             self.print_result("Django", "API Connectivity", False, str(e))
 
@@ -129,8 +130,12 @@ class SystemHealthChecker:
         try:
             response = self.session.get(f"{self.api_base}/debates/sessions/", timeout=5)
             success = response.status_code == 200
-            self.print_result("Django", "Database Connection", success,
-                              f"Status: {response.status_code}")
+            self.print_result(
+                "Django",
+                "Database Connection",
+                success,
+                f"Status: {response.status_code}",
+            )
         except Exception as e:
             self.print_result("Django", "Database Connection", False, str(e))
 
@@ -144,20 +149,22 @@ class SystemHealthChecker:
                 "username": f"healthcheck_{int(time.time())}",
                 "email": f"healthcheck_{int(time.time())}@test.com",
                 "password": "testpass123",
-                "role": "student"
+                "role": "student",
             }
 
             response = self.session.post(
-                f"{self.api_base}/users/register/", json=user_data)
+                f"{self.api_base}/users/register/", json=user_data
+            )
             success = response.status_code == 201
-            self.print_result("Auth", "User Registration", success,
-                              f"Status: {response.status_code}")
+            self.print_result(
+                "Auth", "User Registration", success, f"Status: {response.status_code}"
+            )
 
             if success:
                 # Test login
                 login_data = {
                     "username": user_data["username"],
-                    "password": user_data["password"]
+                    "password": user_data["password"],
                 }
 
                 response = self.session.post(f"{self.api_base}/token/", json=login_data)
@@ -166,22 +173,35 @@ class SystemHealthChecker:
                     access_token = tokens.get("access")
                     refresh_token = tokens.get("refresh")
 
-                    self.print_result("Auth", "JWT Token Generation", True,
-                                      f"Access: {bool(access_token)}, Refresh: {bool(refresh_token)}")
+                    self.print_result(
+                        "Auth",
+                        "JWT Token Generation",
+                        True,
+                        f"Access: {bool(access_token)}, Refresh: {bool(refresh_token)}",
+                    )
 
                     # Test protected endpoint access
                     if access_token:
-                        headers = {'Authorization': f'Bearer {access_token}'}
+                        headers = {"Authorization": f"Bearer {access_token}"}
                         response = self.session.get(
-                            f"{self.api_base}/users/profile/", headers=headers)
+                            f"{self.api_base}/users/profile/", headers=headers
+                        )
                         success = response.status_code == 200
-                        self.print_result("Auth", "Protected Endpoint Access", success,
-                                          f"Status: {response.status_code}")
+                        self.print_result(
+                            "Auth",
+                            "Protected Endpoint Access",
+                            success,
+                            f"Status: {response.status_code}",
+                        )
 
                         return access_token
                 else:
-                    self.print_result("Auth", "JWT Token Generation", False,
-                                      f"Status: {response.status_code}")
+                    self.print_result(
+                        "Auth",
+                        "JWT Token Generation",
+                        False,
+                        f"Status: {response.status_code}",
+                    )
 
         except Exception as e:
             self.print_result("Auth", "Authentication Flow", False, str(e))
@@ -194,10 +214,8 @@ class SystemHealthChecker:
 
         if not access_token:
             self.print_result(
-                "WebSocket",
-                "Authentication Token",
-                False,
-                "No access token provided")
+                "WebSocket", "Authentication Token", False, "No access token provided"
+            )
             return
 
         try:
@@ -206,37 +224,38 @@ class SystemHealthChecker:
 
             websocket = await websockets.connect(ws_url)
             self.print_result(
-                "WebSocket",
-                "Connection Establishment",
-                True,
-                "Connected successfully")
+                "WebSocket", "Connection Establishment", True, "Connected successfully"
+            )
 
             # Test message sending
             message_data = {
                 "type": "chat_message",
                 "message": "Health check message",
-                "session_id": 2
+                "session_id": 2,
             }
 
             await websocket.send(json.dumps(message_data))
             self.print_result(
-                "WebSocket",
-                "Message Sending",
-                True,
-                "Message sent successfully")
+                "WebSocket", "Message Sending", True, "Message sent successfully"
+            )
 
             # Test message receiving
             try:
                 response = await asyncio.wait_for(websocket.recv(), timeout=3.0)
                 data = json.loads(response)
-                self.print_result("WebSocket", "Message Receiving", True,
-                                  f"Received: {data.get('type')}")
+                self.print_result(
+                    "WebSocket",
+                    "Message Receiving",
+                    True,
+                    f"Received: {data.get('type')}",
+                )
             except asyncio.TimeoutError:
                 self.print_result(
                     "WebSocket",
                     "Message Receiving",
                     False,
-                    "Timeout waiting for response")
+                    "Timeout waiting for response",
+                )
 
             await websocket.close()
 
@@ -251,19 +270,22 @@ class SystemHealthChecker:
             # Test frontend availability
             response = self.session.get(self.frontend_base, timeout=5)
             success = response.status_code == 200
-            self.print_result("Frontend", "React App Availability", success,
-                              f"Status: {response.status_code}")
+            self.print_result(
+                "Frontend",
+                "React App Availability",
+                success,
+                f"Status: {response.status_code}",
+            )
 
             # Test if it's serving the React app
-            if success and 'react' in response.text.lower():
+            if success and "react" in response.text.lower():
                 self.print_result(
-                    "Frontend",
-                    "React App Content",
-                    True,
-                    "React app detected")
+                    "Frontend", "React App Content", True, "React app detected"
+                )
             elif success:
-                self.print_result("Frontend", "React App Content",
-                                  True, "Frontend serving content")
+                self.print_result(
+                    "Frontend", "React App Content", True, "Frontend serving content"
+                )
 
         except Exception as e:
             self.print_result("Frontend", "Frontend Connection", False, str(e))
@@ -274,27 +296,40 @@ class SystemHealthChecker:
 
         try:
             # Test preflight request
-            response = self.session.options(f"{self.api_base}/debates/topics/",
-                                            headers={
-                'Origin': self.frontend_base,
-                'Access-Control-Request-Method': 'GET',
-                'Access-Control-Request-Headers': 'Authorization, Content-Type'
-            })
+            response = self.session.options(
+                f"{self.api_base}/debates/topics/",
+                headers={
+                    "Origin": self.frontend_base,
+                    "Access-Control-Request-Method": "GET",
+                    "Access-Control-Request-Headers": "Authorization, Content-Type",
+                },
+            )
 
             success = response.status_code == 200
-            self.print_result("CORS", "Preflight Request", success,
-                              f"Status: {response.status_code}")
+            self.print_result(
+                "CORS", "Preflight Request", success, f"Status: {response.status_code}"
+            )
 
             if success:
                 cors_headers = {
-                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
-                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
-                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers'),
+                    "Access-Control-Allow-Origin": response.headers.get(
+                        "Access-Control-Allow-Origin"
+                    ),
+                    "Access-Control-Allow-Methods": response.headers.get(
+                        "Access-Control-Allow-Methods"
+                    ),
+                    "Access-Control-Allow-Headers": response.headers.get(
+                        "Access-Control-Allow-Headers"
+                    ),
                 }
 
                 for header, value in cors_headers.items():
-                    self.print_result("CORS", header.replace('Access-Control-Allow-', ''),
-                                      bool(value), value or "Not set")
+                    self.print_result(
+                        "CORS",
+                        header.replace("Access-Control-Allow-", ""),
+                        bool(value),
+                        value or "Not set",
+                    )
 
         except Exception as e:
             self.print_result("CORS", "CORS Configuration", False, str(e))
@@ -305,8 +340,8 @@ class SystemHealthChecker:
 
         # Test API response times
         endpoints = [
-            ('/debates/topics/', 'Topics API'),
-            ('/debates/sessions/', 'Sessions API'),
+            ("/debates/topics/", "Topics API"),
+            ("/debates/sessions/", "Sessions API"),
         ]
 
         for endpoint, name in endpoints:
@@ -318,8 +353,12 @@ class SystemHealthChecker:
                 response_time = (end_time - start_time) * 1000  # milliseconds
                 success = response.status_code == 200 and response_time < 1000
 
-                self.print_result("Performance", f"{name} Response Time", success,
-                                  f"{response_time:.1f}ms")
+                self.print_result(
+                    "Performance",
+                    f"{name} Response Time",
+                    success,
+                    f"{response_time:.1f}ms",
+                )
 
             except Exception as e:
                 self.print_result("Performance", f"{name} Response Time", False, str(e))
@@ -358,33 +397,43 @@ class SystemHealthChecker:
         passed_tests = 0
 
         for component, tests in self.results.items():
-            component_passed = sum(1 for test in tests if test['success'])
+            component_passed = sum(1 for test in tests if test["success"])
             component_total = len(tests)
             total_tests += component_total
             passed_tests += component_passed
 
-            success_rate = (component_passed / component_total) * \
-                100 if component_total > 0 else 0
-            status = "🟢" if success_rate >= 80 else "🟡" if success_rate >= 60 else "🔴"
+            success_rate = (
+                (component_passed / component_total) * 100 if component_total > 0 else 0
+            )
+            status = (
+                "🟢" if success_rate >= 80 else "🟡" if success_rate >= 60 else "🔴"
+            )
 
             print(
-                f"{status} {component}: {component_passed}/{component_total} tests passed ({success_rate:.1f}%)")
+                f"{status} {component}: {component_passed}/{component_total} tests passed ({success_rate:.1f}%)"
+            )
 
-        overall_success_rate = (passed_tests / total_tests) * \
-            100 if total_tests > 0 else 0
-        overall_status = "🟢 HEALTHY" if overall_success_rate >= 80 else "🟡 WARNING" if overall_success_rate >= 60 else "🔴 CRITICAL"
+        overall_success_rate = (
+            (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+        )
+        overall_status = (
+            "🟢 HEALTHY"
+            if overall_success_rate >= 80
+            else "🟡 WARNING" if overall_success_rate >= 60 else "🔴 CRITICAL"
+        )
 
         print("\n" + "=" * 70)
         print(f"🏥 OVERALL SYSTEM STATUS: {overall_status}")
         print(
-            f"📊 Total Tests: {passed_tests}/{total_tests} passed ({overall_success_rate:.1f}%)")
+            f"📊 Total Tests: {passed_tests}/{total_tests} passed ({overall_success_rate:.1f}%)"
+        )
         print("=" * 70)
 
         # Recommendations
         if overall_success_rate < 100:
             print("\n💡 RECOMMENDATIONS:")
             for component, tests in self.results.items():
-                failed_tests = [test for test in tests if not test['success']]
+                failed_tests = [test for test in tests if not test["success"]]
                 if failed_tests:
                     print(f"\n🔧 {component}:")
                     for test in failed_tests:
@@ -396,6 +445,7 @@ class SystemHealthChecker:
 async def main():
     checker = SystemHealthChecker()
     await checker.run_full_health_check()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -11,6 +11,7 @@ from ..serializers import UserProfileSerializer
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     """ViewSet for managing user profiles"""
+
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 

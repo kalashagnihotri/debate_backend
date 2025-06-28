@@ -62,6 +62,7 @@ class CurrentUserProfileView(generics.RetrieveAPIView):
     Returns:
         Response: Serialized user data for the authenticated user
     """
+
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
@@ -85,7 +86,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         """Return profiles filtered by current user."""
         return Profile.objects.filter(user=self.request.user)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def me(self, request):
         """
         Get current user's profile with statistics.
@@ -99,7 +100,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(profile)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['patch', 'put'])
+    @action(detail=False, methods=["patch", "put"])
     def update_profile(self, request):
         """
         Update current user's profile.
@@ -110,11 +111,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
             Response: Updated profile data or validation errors
         """
         profile, created = Profile.objects.get_or_create(user=request.user)
-        serializer = self.get_serializer(
-            profile,
-            data=request.data,
-            partial=True
-        )
+        serializer = self.get_serializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -144,6 +141,7 @@ class CurrentUserDetailView(generics.RetrieveAPIView):
     Returns:
         Response: Detailed user profile data with participation statistics
     """
+
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated]
 

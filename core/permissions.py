@@ -29,9 +29,9 @@ class IsModerator(BasePermission):
             bool: True if user is authenticated and has moderator role
         """
         return (
-            request.user and
-            request.user.is_authenticated and
-            request.user.role == 'moderator'
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == "moderator"
         )
 
 
@@ -77,20 +77,16 @@ class CanPostMessage(BasePermission):
         Returns:
             bool: True if user is an active (non-muted) participant
         """
-        session_pk = request.query_params.get('session_pk')
+        session_pk = request.query_params.get("session_pk")
         if not session_pk:
             return False
 
         try:
             participation = Participation.objects.get(
-                session_id=session_pk,
-                user=request.user
+                session_id=session_pk, user=request.user
             )
             # User must be a participant and not muted
-            return (
-                participation.role == 'participant' and
-                not participation.is_muted
-            )
+            return participation.role == "participant" and not participation.is_muted
         except Participation.DoesNotExist:
             return False
 
@@ -114,16 +110,15 @@ class CanViewMessages(BasePermission):
         Returns:
             bool: True if user is a participant (muted or active)
         """
-        session_pk = request.query_params.get('session_pk')
+        session_pk = request.query_params.get("session_pk")
         if not session_pk:
             return False
 
         try:
             participation = Participation.objects.get(
-                session_id=session_pk,
-                user=request.user
+                session_id=session_pk, user=request.user
             )
             # User must be a participant (can be muted but still see messages)
-            return participation.role == 'participant'
+            return participation.role == "participant"
         except Participation.DoesNotExist:
             return False

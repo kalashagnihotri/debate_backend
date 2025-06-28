@@ -21,24 +21,21 @@ class Participation(TimestampedMixin):
     Manages user roles, sides, activity metrics, and moderation status
     within specific debate sessions.
     """
+
     ROLE_CHOICES = [
-        ('participant', 'Participant'),
-        ('viewer', 'Viewer'),
+        ("participant", "Participant"),
+        ("viewer", "Viewer"),
     ]
 
     SIDE_CHOICES = [
-        ('proposition', 'Proposition'),
-        ('opposition', 'Opposition'),
+        ("proposition", "Proposition"),
+        ("opposition", "Opposition"),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    session = models.ForeignKey('DebateSession', on_delete=models.CASCADE)
-    role = models.CharField(
-        max_length=20, choices=ROLE_CHOICES, default='viewer'
-    )
-    side = models.CharField(
-        max_length=20, choices=SIDE_CHOICES, null=True, blank=True
-    )
+    session = models.ForeignKey("DebateSession", on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="viewer")
+    side = models.CharField(max_length=20, choices=SIDE_CHOICES, null=True, blank=True)
 
     joined_at = models.DateTimeField(default=timezone.now)
     is_muted = models.BooleanField(default=False)
@@ -57,9 +54,9 @@ class Participation(TimestampedMixin):
     questions_asked = models.IntegerField(default=0)
 
     class Meta:
-        unique_together = ('user', 'session')
-        verbose_name = 'Participation'
-        verbose_name_plural = 'Participations'
+        unique_together = ("user", "session")
+        verbose_name = "Participation"
+        verbose_name_plural = "Participations"
 
     def __str__(self):
         return f"{self.user.username} - {self.role} in {self.session}"
@@ -74,11 +71,11 @@ class Participation(TimestampedMixin):
             ValidationError: If participant lacks a side.
         """
         # Participants must have a side
-        if self.role == 'participant' and not self.side:
+        if self.role == "participant" and not self.side:
             raise ValidationError(
-                'Participants must choose a side (proposition or opposition)'
+                "Participants must choose a side (proposition or opposition)"
             )
 
         # Viewers cannot have a side
-        if self.role == 'viewer' and self.side:
+        if self.role == "viewer" and self.side:
             self.side = None

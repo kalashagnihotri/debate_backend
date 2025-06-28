@@ -19,7 +19,7 @@ from users.jwt_views import CustomTokenObtainPairView
 schema_view = get_schema_view(
     openapi.Info(
         title="Online Debate Platform API",
-        default_version='v1',
+        default_version="v1",
         description="API documentation for the Online Debate Platform",
         contact=openapi.Contact(email="contact@example.com"),
         license=openapi.License(name="MIT License"),
@@ -30,29 +30,34 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     # Django admin
-    path('admin/', admin.site.urls),
-
+    path("admin/", admin.site.urls),
     # API documentation
     path(
-        'swagger/',
-        schema_view.with_ui('swagger', cache_timeout=0),
-        name='schema-swagger-ui'
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
     ),
-    path(
-        'redoc/',
-        schema_view.with_ui('redoc', cache_timeout=0),
-        name='schema-redoc'
-    ),
-
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     # API endpoints
-    path('api/v1/', include([
-        path('users/', include('users.urls')),
-        path('debates/', include('debates.urls')),
-        path('notifications/', include('notifications.urls')),
-        # JWT Authentication endpoints
-        path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    ])),
+    path(
+        "api/v1/",
+        include(
+            [
+                path("users/", include("users.urls")),
+                path("debates/", include("debates.urls")),
+                path("notifications/", include("notifications.urls")),
+                # JWT Authentication endpoints
+                path(
+                    "token/",
+                    CustomTokenObtainPairView.as_view(),
+                    name="token_obtain_pair",
+                ),
+                path(
+                    "token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+                ),
+            ]
+        ),
+    ),
 ]
 
 # Serve media files in development

@@ -10,7 +10,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='debate_profile')
+        related_name="debate_profile",
+    )
     total_debates_participated = models.IntegerField(default=0)
     total_debates_won = models.IntegerField(default=0)
     total_messages_sent = models.IntegerField(default=0)
@@ -24,4 +25,4 @@ class UserProfile(models.Model):
         return f"{self.user.username}'s Profile"
 
     class Meta:
-        ordering = ['-reputation_score']
+        ordering = ["-reputation_score"]
