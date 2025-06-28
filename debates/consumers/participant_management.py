@@ -15,7 +15,8 @@ class ParticipantManagementMixin:
 
     @database_sync_to_async
     def add_participant(self):
-        from ..models import Message, Participation
+        from ..models.message import Message  # Explicitly import from message.py
+        from ..models.participation import Participation
 
         # Add user to active participants list in cache
         cache_key = f"debate_participants_{self.debate_id}"
@@ -47,9 +48,10 @@ class ParticipantManagementMixin:
 
         Message.objects.create(
             session=self.debate_session,
-            author=None,  # System message
+            user=None,  # System message - no user
             content=f"{self.user.username} joined as {role_text}",
-            message_type="join",
+            message_type="system",  # Changed from "join" to "system"
+            is_system_message=True,  # Mark as system message
         )
 
         logger.info(
@@ -61,7 +63,8 @@ class ParticipantManagementMixin:
 
     @database_sync_to_async
     def remove_participant(self):
-        from ..models import Message, Participation
+        from ..models.message import Message  # Explicitly import from message.py
+        from ..models.participation import Participation
 
         # Remove user from active participants list in cache
         cache_key = f"debate_participants_{self.debate_id}"
@@ -80,9 +83,10 @@ class ParticipantManagementMixin:
 
         Message.objects.create(
             session=self.debate_session,
-            author=None,  # System message
+            user=None,  # System message - no user
             content=f"{self.user.username} ({role_text}) left the session",
-            message_type="leave",
+            message_type="system",  # Changed from "leave" to "system"
+            is_system_message=True,  # Mark as system message
         )
 
         logger.info(
@@ -154,7 +158,7 @@ class ParticipantManagementMixin:
 
     @database_sync_to_async
     def get_participation_data(self, user_id, session_id):
-        from ..models import Participation
+        from ..models.participation import Participation
 
         try:
             participation = Participation.objects.select_related("user").get(

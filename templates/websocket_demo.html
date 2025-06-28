@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Debate Platform - WebSocket Demo</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Online Debate Platform</h1>
+            <p>Real-time Debate WebSocket Demo</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Authentication Section -->
+        <div class="auth-section" id="auth-section">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="login-username">Username</label>
+                    <input type="text" class="form-input" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <input type="password" class="form-input" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label class="form-label" for="register-username">Username</label>
+                    <input type="text" class="form-input" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-email">Email</label>
+                    <input type="email" class="form-input" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-password">Password</label>
+                    <input type="password" class="form-input" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-password-confirm">Confirm Password</label>
+                    <input type="password" class="form-input" id="register-password-confirm" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+
+        <!-- Connection Panel -->
+        <div class="connection-panel">
+            <div class="connection-info">
+                <div>
+                    <h3>Connection Status: <span id="connection-status" class="status warning">Disconnected</span></h3>
+                    <p>Current User: <span id="current-user">Not logged in</span></p>
+                    <p>Session ID: <span id="session-id">Not connected</span></p>
+                </div>
+                <div class="controls">
+                    <button id="connect-btn" class="btn btn-primary" onclick="connectToDebate()">Connect to Debate</button>
+                    <button id="disconnect-btn" class="btn btn-secondary" onclick="disconnectFromDebate()" disabled>Disconnect</button>
+                    <button id="ping-btn" class="btn btn-secondary" onclick="sendPing()" disabled>Send Ping</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Configuration -->
+        <div class="connection-form" id="connection-form">
+            <h3>Connection Configuration</h3>
+            <div class="form-group">
+                <label class="form-label" for="session-input">Debate Session ID</label>
+                <input type="number" class="form-input" id="session-input" value="1" min="1">
+                <div class="form-text">Enter the ID of the debate session you want to join</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="server-url">WebSocket Server URL</label>
+                <input type="text" class="form-input" id="server-url" value="ws://localhost:8001">
+                <div class="form-text">Default: ws://localhost:8001 (matches your Django Channels setup)</div>
+            </div>
+        </div>
+
+        <!-- Main Debate Interface -->
+        <div class="debate-interface" id="debate-interface" style="display: none;">
+            <!-- Chat Area -->
+            <div class="chat-area">
+                <div class="chat-header">
+                    <span>Debate Session <span id="current-session-id">-</span></span>
+                    <span id="session-status">Waiting...</span>
+                </div>
+                
+                <div class="messages-container" id="messages-container">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                
+                <div class="typing-indicators" id="typing-indicators">
+                    <!-- Typing indicators will be shown here -->
+                </div>
+                
+                <div class="message-input-area">
+                    <form class="message-form" id="message-form">
+                        <textarea 
+                            class="message-input" 
+                            id="message-input" 
+                            placeholder="Type your message here..." 
+                            rows="2"
+                            maxlength="500"
+                        ></textarea>
+                        <button type="submit" class="btn btn-primary" id="send-btn">Send</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Participants Panel -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-header">
+                        Participants (<span id="participant-count">0</span>)
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="participants-list" id="participants-list">
+                            <!-- Participants will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Info Panel -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-header">Session Information</div>
+                    <div class="sidebar-content">
+                        <div class="session-info">
+                            <div class="info-item">
+                                <span class="info-label">Status:</span>
+                                <span class="info-value" id="session-status-detail">Unknown</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Messages:</span>
+                                <span class="info-value" id="message-count">0</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Connected:</span>
+                                <span class="info-value" id="connection-time">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Panel -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-header">Quick Actions</div>
+                    <div class="sidebar-content">
+                        <button class="btn btn-secondary" onclick="clearMessages()" style="width: 100%; margin-bottom: 0.5rem;">Clear Messages</button>
+                        <button class="btn btn-secondary" onclick="sendTestMessage()" style="width: 100%; margin-bottom: 0.5rem;">Send Test Message</button>
+                        <button class="btn btn-secondary" onclick="startTypingIndicator()" style="width: 100%;">Test Typing</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Test Section -->
+        <div class="connection-form">
+            <h3>API Test Section</h3>
+            <p>Test your Django REST API endpoints:</p>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="testAPIEndpoints()">Test API Endpoints</button>
+                <button class="btn btn-secondary" onclick="fetchDebateSessions()">Fetch Debate Sessions</button>
+                <button class="btn btn-secondary" onclick="testAuthentication()">Test JWT Auth</button>
+            </div>
+            <div id="api-results" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 5px; display: none;">
+                <h4>API Test Results:</h4>
+                <pre id="api-output"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../static/js/websocket-client.js"></script>
+    <script>
+        // Global variables
+        let currentToken = null;
+        let currentUser = null;
+        let connectionStartTime = null;
+        let messageCount = 0;
+        let typingTimeout = null;
+
+        // Authentication functions
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-form`).classList.add('active');
+        }
+
+        // Login form handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentToken = data.access;
+                    currentUser = { username, id: data.user_id };
+                    
+                    document.getElementById('current-user').textContent = username;
+                    document.getElementById('auth-section').style.display = 'none';
+                    
+                    alert('Login successful! You can now connect to a debate session.');
+                } else {
+                    const error = await response.json();
+                    alert('Login failed: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            }
+        });
+
+        // Register form handler
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const passwordConfirm = document.getElementById('register-password-confirm').value;
+            
+            if (password !== passwordConfirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Registration successful! Please login with your credentials.');
+                    switchAuthTab('login');
+                } else {
+                    const error = await response.json();
+                    alert('Registration failed: ' + JSON.stringify(error));
+                }
+            } catch (error) {
+                alert('Registration failed: ' + error.message);
+            }
+        });
+
+        // WebSocket connection functions
+        function connectToDebate() {
+            if (!currentToken) {
+                alert('Please login first!');
+                return;
+            }
+            
+            const sessionId = document.getElementById('session-input').value;
+            if (!sessionId) {
+                alert('Please enter a session ID!');
+                return;
+            }
+            
+            // Initialize WebSocket connection
+            debateClient = initializeDebateWebSocket(sessionId, currentToken);
+            
+            // Update UI
+            document.getElementById('session-id').textContent = sessionId;
+            document.getElementById('current-session-id').textContent = sessionId;
+            document.getElementById('connect-btn').disabled = true;
+            document.getElementById('disconnect-btn').disabled = false;
+            document.getElementById('ping-btn').disabled = false;
+            document.getElementById('debate-interface').style.display = 'grid';
+            document.getElementById('connection-form').style.display = 'none';
+            
+            connectionStartTime = new Date();
+            document.getElementById('connection-time').textContent = connectionStartTime.toLocaleTimeString();
+        }
+
+        function disconnectFromDebate() {
+            if (debateClient) {
+                debateClient.disconnect();
+            }
+            
+            // Update UI
+            document.getElementById('session-id').textContent = 'Not connected';
+            document.getElementById('connect-btn').disabled = false;
+            document.getElementById('disconnect-btn').disabled = true;
+            document.getElementById('ping-btn').disabled = true;
+            document.getElementById('debate-interface').style.display = 'none';
+            document.getElementById('connection-form').style.display = 'block';
+            
+            // Clear messages
+            document.getElementById('messages-container').innerHTML = '';
+            document.getElementById('participants-list').innerHTML = '';
+            messageCount = 0;
+            document.getElementById('message-count').textContent = '0';
+        }
+
+        function sendPing() {
+            if (debateClient && debateClient.isConnected) {
+                debateClient.sendPing();
+            }
+        }
+
+        // Message form handler
+        document.getElementById('message-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            
+            if (message && debateClient && debateClient.isConnected) {
+                if (debateClient.sendMessage(message)) {
+                    messageInput.value = '';
+                    messageCount++;
+                    document.getElementById('message-count').textContent = messageCount.toString();
+                }
+            }
+        });
+
+        // Typing indicator
+        document.getElementById('message-input').addEventListener('input', () => {
+            if (debateClient && debateClient.isConnected) {
+                debateClient.sendTypingIndicator('start');
+                
+                // Clear existing timeout
+                if (typingTimeout) {
+                    clearTimeout(typingTimeout);
+                }
+                
+                // Set new timeout to stop typing
+                typingTimeout = setTimeout(() => {
+                    debateClient.sendTypingIndicator('stop');
+                }, 1000);
+            }
+        });
+
+        // Utility functions
+        function clearMessages() {
+            document.getElementById('messages-container').innerHTML = '';
+            messageCount = 0;
+            document.getElementById('message-count').textContent = '0';
+        }
+
+        function sendTestMessage() {
+            if (debateClient && debateClient.isConnected) {
+                const testMessages = [
+                    "This is a test message to demonstrate real-time communication.",
+                    "WebSocket connection is working perfectly!",
+                    "The debate platform supports real-time messaging.",
+                    "This message was sent using the test function."
+                ];
+                
+                const randomMessage = testMessages[Math.floor(Math.random() * testMessages.length)];
+                debateClient.sendMessage(randomMessage);
+            }
+        }
+
+        function startTypingIndicator() {
+            if (debateClient && debateClient.isConnected) {
+                debateClient.sendTypingIndicator('start');
+                setTimeout(() => {
+                    debateClient.sendTypingIndicator('stop');
+                }, 3000);
+            }
+        }
+
+        // API testing functions
+        async function testAPIEndpoints() {
+            const results = [];
+            
+            try {
+                // Test health check
+                const healthResponse = await fetch('http://localhost:8000/api/health/');
+                results.push(`Health Check: ${healthResponse.status} ${healthResponse.statusText}`);
+                
+                // Test authentication endpoints
+                const authResponse = await fetch('http://localhost:8000/api/auth/user/', {
+                    headers: currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {}
+                });
+                results.push(`Auth User: ${authResponse.status} ${authResponse.statusText}`);
+                
+                // Test debates endpoints
+                const debatesResponse = await fetch('http://localhost:8000/api/debates/sessions/', {
+                    headers: currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {}
+                });
+                results.push(`Debate Sessions: ${debatesResponse.status} ${debatesResponse.statusText}`);
+                
+            } catch (error) {
+                results.push(`Error: ${error.message}`);
+            }
+            
+            document.getElementById('api-results').style.display = 'block';
+            document.getElementById('api-output').textContent = results.join('\n');
+        }
+
+        async function fetchDebateSessions() {
+            try {
+                const response = await fetch('http://localhost:8000/api/debates/sessions/', {
+                    headers: currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {}
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('api-results').style.display = 'block';
+                    document.getElementById('api-output').textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                document.getElementById('api-results').style.display = 'block';
+                document.getElementById('api-output').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testAuthentication() {
+            if (!currentToken) {
+                alert('Please login first!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/user/', {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('api-results').style.display = 'block';
+                    document.getElementById('api-output').textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                document.getElementById('api-results').style.display = 'block';
+                document.getElementById('api-output').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Debate Platform WebSocket Demo initialized');
+            console.log('Make sure your Django server is running on port 8000');
+            console.log('Make sure your Daphne server is running on port 8001');
+        });
+    </script>
+</body>
+</html>

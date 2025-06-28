@@ -1,17 +1,35 @@
 """
-Test settings for running tests with SQLite instead of PostgreSQL.
-This allows testing without requiring a PostgreSQL server.
+Test settings for running tests.
+Uses PostgreSQL in CI (when DATABASE_URL is set) or SQLite for local development.
 """
 
+import os
 from .settings import *
 
-# Override database to use SQLite for tests
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",  # Use in-memory database for faster tests
+# Use PostgreSQL if DATABASE_URL is set (for CI), otherwise use SQLite
+if os.environ.get("DATABASE_URL"):
+    # PostgreSQL configuration for CI
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "test_debate_db"),
+            "USER": os.environ.get("DB_USER", "postgres"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", "postgres"),
+            "HOST": os.environ.get("DB_HOST", "localhost"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+            "TEST": {
+                "NAME": os.environ.get("DB_NAME", "test_debate_db"),
+            },
+        }
     }
-}
+else:
+    # SQLite configuration for local development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",  # Use in-memory database for faster tests
+        }
+    }
 
 # Use dummy cache for tests
 CACHES = {

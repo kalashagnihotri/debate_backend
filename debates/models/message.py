@@ -32,7 +32,9 @@ class Message(TimestampedMixin):
     session = models.ForeignKey(
         "DebateSession", related_name="messages", on_delete=models.CASCADE
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True
+    )  # Allow null for system messages
     content = models.TextField()
     message_type = models.CharField(
         max_length=20, choices=MESSAGE_TYPE_CHOICES, default="text"

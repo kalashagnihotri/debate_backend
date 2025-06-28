@@ -4,5 +4,6 @@ This file imports all consumers from the consumers package for backward compatib
 """
 
 # Import all consumers from the modular structure
-# TODO: Replace star import with specific imports
-# from .consumers import *
+from .consumers import DebateConsumer, NotificationConsumer
+
+__all__ = ["DebateConsumer", "NotificationConsumer"]
