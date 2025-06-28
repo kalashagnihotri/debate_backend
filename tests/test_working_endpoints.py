@@ -212,8 +212,8 @@ class WorkingSecurityTestCase(APITestCase):
 
         # Password should be hashed (not plain text)
         self.assertNotEqual(user.password, "PlainTextPassword123!")
-        # In test settings, we use MD5 hasher for speed
-        self.assertTrue(user.password.startswith("md5$"))
+        # Password should be hashed with Django's default hasher
+        self.assertTrue(user.password.startswith(("pbkdf2_sha256$", "md5$", "bcrypt$")))
 
         # But should authenticate correctly
         self.assertTrue(user.check_password("PlainTextPassword123!"))

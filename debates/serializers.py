@@ -61,7 +61,6 @@ class ParticipationSerializer(serializers.ModelSerializer):
             "is_muted",
             "warnings_count",
             "messages_sent",
-            "has_voted",
         ]
 
 
@@ -232,7 +231,7 @@ class SessionTranscriptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SessionTranscript
-        fields = ["id", "session", "content", "summary", "generated_at"]
+        fields = ["id", "session", "content", "generated_at"]
 
 
 class ParticipationDetailSerializer(serializers.ModelSerializer):

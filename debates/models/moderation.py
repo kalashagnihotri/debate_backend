@@ -64,8 +64,8 @@ class ModerationAction(TimestampedMixin):
         return f"{self.moderator.username} {self.action} {target}"
 
 
-class UserProfile(TimestampedMixin):
-    """Extended user profile for debate platform"""
+class UserProfileLegacy(TimestampedMixin):
+    """Extended user profile for debate platform - DEPRECATED, use profile_models.UserProfile instead"""
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 

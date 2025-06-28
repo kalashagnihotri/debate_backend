@@ -35,7 +35,9 @@ class DebateVoteViewSet(viewsets.ModelViewSet):
         session_id = self.request.query_params.get("session_id")
         if session_id:
             return Vote.objects.filter(debate_session_id=session_id)
-        return Vote.objects.filter(user=self.request.user)
+        if hasattr(self.request, "user") and self.request.user.is_authenticated:
+            return Vote.objects.filter(user=self.request.user)
+        return Vote.objects.none()
 
 
 class VoteSubmissionViewSet(viewsets.ViewSet):

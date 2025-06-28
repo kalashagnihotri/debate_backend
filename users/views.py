@@ -84,7 +84,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Return profiles filtered by current user."""
-        return Profile.objects.filter(user=self.request.user)
+        if hasattr(self.request, "user") and self.request.user.is_authenticated:
+            return Profile.objects.filter(user=self.request.user)
+        return Profile.objects.none()
 
     @action(detail=False, methods=["get"])
     def me(self, request):

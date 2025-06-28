@@ -6,8 +6,9 @@ Exports all models for use throughout the application.
 # Import base classes for other apps that might need them
 from .base import StatusMixin, TimestampedMixin
 from .message import Message
-from .moderation import ModerationAction, SessionTranscript, UserProfile
+from .moderation import ModerationAction, SessionTranscript
 from .participation import Participation
+from .profile_models import UserProfile
 from .session import DebateSession
 from .topic import DebateTopic
 from .vote import Vote, DebateVote

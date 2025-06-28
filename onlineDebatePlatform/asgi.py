@@ -1,6 +1,5 @@
 import os
 
-import debates.routing
 import django
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
@@ -11,6 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onlineDebatePlatform.settings")
 django.setup()
 
 # Import routing after Django is set up
+import debates.routing
 
 application = ProtocolTypeRouter(
     {
