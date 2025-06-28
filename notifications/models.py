@@ -10,8 +10,10 @@ class Notification(models.Model):
     As per requirements:
     - id (Primary Key)
     - user (ForeignKey to User model)
+    - title (CharField for notification title)
     - message (TextField)
     - type (ChoiceField: UPCOMING_DEBATE, SESSION_CHANGE, MODERATION_ACTION)
+    - notification_type (alias for type field)
     - is_read (BooleanField, default=False)
     - created_at (Timestamp)
     """
@@ -31,6 +33,11 @@ class Notification(models.Model):
         related_name='notifications',
         help_text="The user who will receive this notification"
     )
+    title = models.CharField(
+        max_length=255,
+        help_text="The notification title",
+        default="Notification"
+    )
     message = models.TextField(
         help_text="The notification message content"
     )
@@ -47,6 +54,16 @@ class Notification(models.Model):
         default=timezone.now,
         help_text="When the notification was created"
     )
+
+    @property
+    def notification_type(self):
+        """Alias for type field for backward compatibility."""
+        return self.type
+
+    @notification_type.setter
+    def notification_type(self, value):
+        """Setter for notification_type alias."""
+        self.type = value
 
     class Meta:
         ordering = ['-created_at']
