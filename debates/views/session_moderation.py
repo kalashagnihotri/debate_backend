@@ -14,7 +14,8 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..models import ModerationAction, Notification, Participation
+from ..models import ModerationAction, Participation
+from notifications.models import Notification
 from ..services.notification_service import notification_service
 
 User = get_user_model()
